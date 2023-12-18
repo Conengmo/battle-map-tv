@@ -1,7 +1,9 @@
 from typing import Optional
 
+import pyglet
 from pyglet.window import Window, mouse, FPSDisplay
 
+from battle_map_tv.effects.embers import Embers
 from battle_map_tv.effects.fire import Fire
 from battle_map_tv.grid import Grid
 from battle_map_tv.image import Image
@@ -14,7 +16,9 @@ class ImageWindow(Window):
         self.image: Optional[Image] = None
         self.grid: Optional[Grid] = None
         self.fire: Optional[Fire] = None
+        self.embers: Optional[Embers] = None
         self.fps_display = FPSDisplay(self) if show_fps else None
+        self.add_embers()
 
     def on_draw(self):
         self.clear()
@@ -24,6 +28,8 @@ class ImageWindow(Window):
             self.grid.draw()
         if self.fire is not None:
             self.fire.draw()
+        if self.embers is not None:
+            self.embers.draw()
         if self.fps_display is not None:
             self.fps_display.draw()
 
@@ -86,6 +92,19 @@ class ImageWindow(Window):
         if self.fire is not None:
             self.fire.delete()
             self.fire = None
+
+    def add_embers(self):
+        self.switch_to()
+        self.remove_embers()
+        self.embers = Embers(window_width=self.width, window_height=self.height)
+        pyglet.clock.schedule_interval(self.embers.update, 1 / 60.0)
+
+    def remove_embers(self):
+        self.switch_to()
+        if self.embers is not None:
+            pyglet.clock.unschedule(self.embers.update)
+            self.embers.delete()
+            self.embers = None
 
     def on_mouse_drag(self, x, y, dx, dy, buttons, modifiers):
         self.switch_to()
