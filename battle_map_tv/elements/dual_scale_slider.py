@@ -9,6 +9,9 @@ class DualScaleSlider(QWidget):
 
     def __init__(self):
         super().__init__()
+        self.factor_coarse = 1000
+        self.factor_fine = 100000
+        self.max_scale = 4
 
         scale_layout = QHBoxLayout()
         scale_layout.addWidget(QLabel("Image scale:"))
@@ -19,13 +22,13 @@ class DualScaleSlider(QWidget):
 
         coarse_layout = QHBoxLayout()
         coarse_label = QLabel("Coarse")
-        self.coarse_slider = StyledSlider(lower=1, upper=4000, default=1000)
+        self.coarse_slider = StyledSlider(lower=1, upper=self.max_scale * self.factor_coarse, default=self.factor_coarse)
         coarse_layout.addWidget(coarse_label)
         coarse_layout.addWidget(self.coarse_slider)
 
         fine_layout = QHBoxLayout()
         fine_label = QLabel("Fine")
-        self.fine_slider = StyledSlider(lower=-10000, upper=10000, default=0)
+        self.fine_slider = StyledSlider(lower=-self.factor_fine // 10, upper=self.factor_fine // 10, default=0)
         fine_layout.addWidget(fine_label)
         fine_layout.addWidget(self.fine_slider)
 
@@ -46,9 +49,10 @@ class DualScaleSlider(QWidget):
         self.scale_edit.editingFinished.connect(self.update_scale_from_edit)
 
     def update_scale_from_sliders(self):
-        coarse_value = self.coarse_slider.value() / 1000
-        fine_value = self.fine_slider.value() / 100000
+        coarse_value = self.coarse_slider.value() / self.factor_coarse
+        fine_value = self.fine_slider.value() / self.factor_fine
         total_scale = coarse_value + fine_value
+        total_scale = self._value_bounds(total_scale)
 
         self.scale_edit.setText(f"{total_scale:.5f}")
 
@@ -60,7 +64,15 @@ class DualScaleSlider(QWidget):
             value = float(text)
         except ValueError:
             return
+        value = self._value_bounds(value)
         self.scale_changed.emit(value)
 
-    def update_values(self, value: float):
-        self.scale_edit.setText(f"{value:.5f}")
+    def update_sliders_from_scale(self, value: float):
+        coarse_value = round(self.factor_coarse * value)
+        remainder = value - coarse_value / self.factor_coarse
+        fine_value = round(self.factor_fine * remainder)
+        self.coarse_slider.setValue(coarse_value)
+        self.fine_slider.setValue(fine_value)
+
+    def _value_bounds(self, value: float) -> float:
+        return min(max(value, 1 / self.factor_fine), self.max_scale)

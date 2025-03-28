@@ -147,10 +147,9 @@ class GuiWindow(QWidget):
 
         slider = DualScaleSlider()
         slider.scale_changed.connect(slider_scale_callback)
-
         container.addWidget(slider)
 
-        global_event_dispatcher.add_handler(EventKeys.change_scale, slider.update_values)
+        global_event_dispatcher.add_handler(EventKeys.change_scale, slider.update_sliders_from_scale)
 
     def add_row_grid(self):
         container = self._create_container()
