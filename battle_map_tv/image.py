@@ -83,23 +83,21 @@ class Image:
         else:
             self.pixmap_item.setRotation(self.rotation)
 
-        self._scale: float = 1.0
         try:
-            self.scale(
-                get_image_from_storage(
-                    self.image_filename,
-                    ImageKeys.scale,
-                )
+            scale = get_image_from_storage(
+                self.image_filename,
+                ImageKeys.scale,
             )
         except KeyError:
-            new_scale = min(
+            scale_fit_image = min(
                 window_width_px / self.pixmap_item.pixmap().width(),
                 window_height_px / self.pixmap_item.pixmap().height(),
             )
-            if new_scale < 1.0:
-                self.scale(new_scale)
+            if scale_fit_image < 1.0:
+                self.scale(scale_fit_image)
         else:
-            global_event_dispatcher.dispatch_event(EventKeys.change_scale, self._scale)
+            self.scale(scale)
+            global_event_dispatcher.dispatch_event(EventKeys.change_scale, scale)
 
         try:
             position = get_image_from_storage(
