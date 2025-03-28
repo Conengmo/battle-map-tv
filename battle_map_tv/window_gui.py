@@ -143,7 +143,7 @@ class GuiWindow(QWidget):
 
         def slider_scale_callback(value: int):
             if self.image_window.image is not None:
-                self.image_window.image.scale(value)
+                self.image_window.image.scale(value, dispatch_event=False)
 
         slider = DualScaleSlider()
         slider.scale_changed.connect(slider_scale_callback)
