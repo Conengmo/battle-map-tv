@@ -20,7 +20,7 @@ from battle_map_tv.ui_elements import (
     ColorSelectionWindow,
     FixedRowGridLayout,
 )
-from elements.dual_scale_slider import DualScaleSlider
+from .elements.dual_scale_slider import DualScaleSlider
 from .window_image import ImageWindow
 from .grid import GridOverlayColor
 
