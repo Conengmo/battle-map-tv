@@ -26,7 +26,9 @@ class CustomGraphicsPixmapItem(QGraphicsPixmapItem):
         self.setTransformOriginPoint(pixmap.width() / 2, pixmap.height() / 2)
 
     def wheelEvent(self, event):
-        self.set_scale(self.scale() + event.delta() / 1500)
+        value = self.scale() + event.delta() / 1500
+        self.set_scale(value)
+        global_event_dispatcher.dispatch_event(EventKeys.change_scale, value)
 
     def mouseReleaseEvent(self, event):
         super().mouseReleaseEvent(event)
@@ -48,7 +50,6 @@ class CustomGraphicsPixmapItem(QGraphicsPixmapItem):
 
     def set_scale(self, value: float):
         self.setScale(value)
-        global_event_dispatcher.dispatch_event(EventKeys.change_scale, value)
         set_image_in_storage(self.image_filename, ImageKeys.scale, value)
 
 

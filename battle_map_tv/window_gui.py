@@ -20,6 +20,7 @@ from battle_map_tv.ui_elements import (
     ColorSelectionWindow,
     FixedRowGridLayout,
 )
+from elements.dual_scale_slider import DualScaleSlider
 from .window_image import ImageWindow
 from .grid import GridOverlayColor
 
@@ -140,31 +141,16 @@ class GuiWindow(QWidget):
     def add_row_scale_slider(self):
         container = self._create_container()
 
-        label = QLabel("Scale")
-        container.addWidget(label)
-
-        slider_factor = 100
-
         def slider_scale_callback(value: int):
             if self.image_window.image is not None:
-                self.image_window.image.scale(normalize_slider_value(value))
+                self.image_window.image.scale(value)
 
-        def normalize_slider_value(value: int) -> float:
-            return max(value, 1) / slider_factor
+        slider = DualScaleSlider()
+        slider.scale_changed.connect(slider_scale_callback)
 
-        slider = StyledSlider(lower=0, upper=4 * slider_factor, default=slider_factor)
-        slider.valueChanged.connect(slider_scale_callback)
-        slider.valueChanged.connect(lambda value: label.setText(str(normalize_slider_value(value))))
         container.addWidget(slider)
 
-        def update_slider_scale_callback(value: float):
-            slider.setValue(int(value * slider_factor))
-
-        global_event_dispatcher.add_handler(EventKeys.change_scale, update_slider_scale_callback)
-
-        label = QLabel(str(slider.value() / slider_factor))
-        label.setMinimumWidth(40)
-        container.addWidget(label)
+        global_event_dispatcher.add_handler(EventKeys.change_scale, slider.update_values)
 
     def add_row_grid(self):
         container = self._create_container()
