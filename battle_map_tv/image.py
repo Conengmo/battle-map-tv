@@ -26,7 +26,8 @@ class CustomGraphicsPixmapItem(QGraphicsPixmapItem):
         self.setTransformOriginPoint(pixmap.width() / 2, pixmap.height() / 2)
 
     def wheelEvent(self, event):
-        self.set_scale(self.scale() + event.delta() / 1500)
+        value = self.scale() + event.delta() / 1500
+        self.set_scale(value)
 
     def mouseReleaseEvent(self, event):
         super().mouseReleaseEvent(event)
@@ -46,9 +47,10 @@ class CustomGraphicsPixmapItem(QGraphicsPixmapItem):
         )
         set_image_in_storage(self.image_filename, ImageKeys.position, position)
 
-    def set_scale(self, value: float):
+    def set_scale(self, value: float, dispatch_event: bool = True):
         self.setScale(value)
-        global_event_dispatcher.dispatch_event(EventKeys.change_scale, value)
+        if dispatch_event:
+            global_event_dispatcher.dispatch_event(EventKeys.change_scale, value)
         set_image_in_storage(self.image_filename, ImageKeys.scale, value)
 
 
@@ -82,23 +84,20 @@ class Image:
         else:
             self.pixmap_item.setRotation(self.rotation)
 
-        self._scale: float = 1.0
         try:
-            self.scale(
-                get_image_from_storage(
-                    self.image_filename,
-                    ImageKeys.scale,
-                )
+            scale = get_image_from_storage(
+                self.image_filename,
+                ImageKeys.scale,
             )
         except KeyError:
-            new_scale = min(
+            scale_fit_image = min(
                 window_width_px / self.pixmap_item.pixmap().width(),
                 window_height_px / self.pixmap_item.pixmap().height(),
             )
-            if new_scale < 1.0:
-                self.scale(new_scale)
+            if scale_fit_image < 1.0:
+                self.scale(scale_fit_image)
         else:
-            global_event_dispatcher.dispatch_event(EventKeys.change_scale, self._scale)
+            self.scale(scale)
 
         try:
             position = get_image_from_storage(
@@ -122,8 +121,8 @@ class Image:
         self.pixmap_item.setRotation(self.rotation)
         set_image_in_storage(self.image_filename, ImageKeys.rotation, self.rotation)
 
-    def scale(self, value: float):
-        self.pixmap_item.set_scale(value)
+    def scale(self, value: float, dispatch_event: bool = True):
+        self.pixmap_item.set_scale(value, dispatch_event=dispatch_event)
 
     def autoscale(self, grid: Grid):
         image_px_per_square = find_image_scale(self.filepath)

@@ -19,10 +19,22 @@ def get_window_icon():
 
 
 class StyledLineEdit(QLineEdit):
-    def __init__(self, max_length: int, placeholder: str, *args, **kwargs):
+    def __init__(
+        self,
+        max_length: int,
+        width: int,
+        placeholder: str = "",
+        value: str = "",
+        *args,
+        **kwargs,
+    ):
         super().__init__(*args, **kwargs)
         self.setMaxLength(max_length)
-        self.setPlaceholderText(placeholder)
+        self.setFixedWidth(width)
+        if placeholder:
+            self.setPlaceholderText(placeholder)
+        if value:
+            self.setText(value)
         self.setStyleSheet(
             """
             QLineEdit {
