@@ -20,37 +20,30 @@ class DualScaleSlider(QWidget):
         scale_layout.addWidget(self.scale_edit)
         scale_layout.addStretch()
 
-        coarse_layout = QHBoxLayout()
         coarse_label = QLabel("Coarse")
         self.coarse_slider = StyledSlider(
             lower=1,
             upper=self.max_scale * self.factor_coarse,
             default=self.factor_coarse,
         )
-        coarse_layout.addWidget(coarse_label)
-        coarse_layout.addWidget(self.coarse_slider)
-
-        fine_layout = QHBoxLayout()
         fine_label = QLabel("Fine")
         self.fine_slider = StyledSlider(
             lower=-self.factor_fine // 10,
             upper=self.factor_fine // 10,
             default=0,
         )
-        fine_layout.addWidget(fine_label)
-        fine_layout.addWidget(self.fine_slider)
 
-        grid_layout = QGridLayout()
-        grid_layout.addWidget(coarse_label, 0, 0)
-        grid_layout.addWidget(self.coarse_slider, 0, 1)
-        grid_layout.addWidget(fine_label, 1, 0)
-        grid_layout.addWidget(self.fine_slider, 1, 1)
-        grid_layout.setColumnStretch(1, 1)
+        sliders_labels_layout = QGridLayout()
+        sliders_labels_layout.addWidget(coarse_label, 0, 0)
+        sliders_labels_layout.addWidget(self.coarse_slider, 0, 1)
+        sliders_labels_layout.addWidget(fine_label, 1, 0)
+        sliders_labels_layout.addWidget(self.fine_slider, 1, 1)
+        sliders_labels_layout.setColumnStretch(1, 1)
 
         main_layout = QVBoxLayout(self)
         main_layout.addLayout(scale_layout)
         main_layout.addSpacing(9)
-        main_layout.addLayout(grid_layout)
+        main_layout.addLayout(sliders_labels_layout)
 
         self.coarse_slider.valueChanged.connect(self.update_scale_from_sliders)
         self.fine_slider.valueChanged.connect(self.update_scale_from_sliders)
