@@ -72,8 +72,7 @@ class DualScaleSlider(QWidget):
             value = float(text)
         except ValueError:
             return
-        value = self._value_bounds(value)
-        self.scale_changed.emit(value)
+        self.update_sliders_from_scale(value)
 
     def update_sliders_from_scale(self, value: float):
         coarse_value = round(self.factor_coarse * value)
