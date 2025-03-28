@@ -20,7 +20,13 @@ def get_window_icon():
 
 class StyledLineEdit(QLineEdit):
     def __init__(
-        self, max_length: int, width: int, placeholder: str = "", value: str = "", *args, **kwargs
+        self,
+        max_length: int,
+        width: int,
+        placeholder: str = "",
+        value: str = "",
+        *args,
+        **kwargs,
     ):
         super().__init__(*args, **kwargs)
         self.setMaxLength(max_length)
