@@ -22,13 +22,21 @@ class DualScaleSlider(QWidget):
 
         coarse_layout = QHBoxLayout()
         coarse_label = QLabel("Coarse")
-        self.coarse_slider = StyledSlider(lower=1, upper=self.max_scale * self.factor_coarse, default=self.factor_coarse)
+        self.coarse_slider = StyledSlider(
+            lower=1,
+            upper=self.max_scale * self.factor_coarse,
+            default=self.factor_coarse,
+        )
         coarse_layout.addWidget(coarse_label)
         coarse_layout.addWidget(self.coarse_slider)
 
         fine_layout = QHBoxLayout()
         fine_label = QLabel("Fine")
-        self.fine_slider = StyledSlider(lower=-self.factor_fine // 10, upper=self.factor_fine // 10, default=0)
+        self.fine_slider = StyledSlider(
+            lower=-self.factor_fine // 10,
+            upper=self.factor_fine // 10,
+            default=0,
+        )
         fine_layout.addWidget(fine_label)
         fine_layout.addWidget(self.fine_slider)
 

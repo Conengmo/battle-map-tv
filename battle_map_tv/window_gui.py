@@ -149,7 +149,10 @@ class GuiWindow(QWidget):
         slider.scale_changed.connect(slider_scale_callback)
         container.addWidget(slider)
 
-        global_event_dispatcher.add_handler(EventKeys.change_scale, slider.update_sliders_from_scale)
+        global_event_dispatcher.add_handler(
+            event_type=EventKeys.change_scale,
+            handler=slider.update_sliders_from_scale,
+        )
 
     def add_row_grid(self):
         container = self._create_container()
