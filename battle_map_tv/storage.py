@@ -28,6 +28,7 @@ class StorageKeys(Enum):
     pixels_per_square = "pixels_per_square"
     previous_image = "previous_image"
     initiative_font_size = "initiative_font_size"
+    initiative_positions = "initiative_positions"
     thumbnail_0 = "thumbnail_0"
     thumbnail_1 = "thumbnail_1"
     thumbnail_2 = "thumbnail_2"
