@@ -28,15 +28,14 @@ class AreaOfEffectManager:
     def __init__(self, window: "ImageWindow", grid: Grid):
         self.window = window
         self.scene = window.scene()
+        self.grid = grid
         self._store: List[BaseShape] = []
         self.rasterize = False
-        self.snap_to_grid = False
         self.waiting_for: Optional[str] = None
         self.color = "white"
         self.start_point: Optional[Tuple[int, int]] = None
         self.temp_obj: Optional[BaseShape] = None
         self.callback: Optional[Callable] = None
-        self.grid = grid
         self._previous_size: Optional[float] = None
 
     def wait_for(self, shape: str, callback: Callable):
