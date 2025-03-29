@@ -3,8 +3,6 @@ name: Release
 on:
   release:
     types: [created]
-  workflow_dispatch:
-  pull_request:
 
 jobs:
   build:
@@ -51,19 +49,12 @@ jobs:
         name: battle-map-tv.exe
         path: ./dist
 
-    - name: Get Release
-      id: get_release
-      uses: bruceadams/get-release@v1.3.2
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
     - name: Upload Release Asset
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-#        upload_url: ${{ github.event.release.upload_url }}
-        upload_url: ${{ steps.get_release.outputs.upload_url }}
+        upload_url: ${{ github.event.release.upload_url }}
         asset_path: ./dist/battle-map-tv.exe
         asset_name: battle-map-tv.exe
         asset_content_type: application/octet-stream
