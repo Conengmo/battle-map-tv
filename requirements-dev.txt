@@ -1,6 +1,8 @@
 hatch
 hatch-vcs
+imageio
 mypy
+nuitka
 pre-commit
 pytest
 ruff
