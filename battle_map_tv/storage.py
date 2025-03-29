@@ -29,10 +29,6 @@ class StorageKeys(Enum):
     previous_image = "previous_image"
     initiative_font_size = "initiative_font_size"
     initiative_positions = "initiative_positions"
-    thumbnail_0 = "thumbnail_0"
-    thumbnail_1 = "thumbnail_1"
-    thumbnail_2 = "thumbnail_2"
-    thumbnail_3 = "thumbnail_3"
 
 
 class Undefined:
