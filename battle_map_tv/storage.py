@@ -65,6 +65,7 @@ class ImageKeys(Enum):
     scale = "scale"
     position = "position"
     rotation = "rotation"
+    grid_pixels_per_square = "grid_pixels_per_square"
 
 
 def get_image_from_storage(
