@@ -7,21 +7,22 @@
 
 Display battle maps for TTRPGs on a tv or monitor that lies flat horizontally on your table.
 
-No more features than needed: just show an image the way you want. Optionally add a grid, initiative order and area of effect shapes.
+No more features than needed: just show an image the way you want. Optionally add a grid,
+initiative tracker and area of effect shapes.
 
-For GM's with little time or who improvise their sessions: much easier to use in-session than a full blown VTT.
+For GM's with little time or who improvise. Much easier to use during your session than a full blown VTT.
+
+- Works on Linux, macOS and Windows
+- Free and open source
+- Works offline
 
 ![IMG_4856](https://github.com/user-attachments/assets/e34624eb-d7da-4804-b22b-2291513e68a8)
 
 *My GM laptop that also runs controls and a TV showing the map. Add minis, tokens or gummibears yourself.*
 
 ## Features
-- Works on Linux, macOS and Windows by using Python.
-- Doesn't use a browser.
-- Free and open source
-- Works offline
-- Simple UI
-- Two windows:
+
+- Application with two windows:
   - one on the TV with your map and grid on it
   - one on your GM laptop with controls
 - Import local image files to display on the tv.
@@ -93,14 +94,14 @@ When creating a shape, hold 'shift' to freeze the size of the shape, but keep ro
 - Uses [Hatch](https://hatch.pypa.io/latest/) to build and release the package.
 - Uses [Nuitka](https://nuitka.net/) to create executables.
 
-### Nuitka guide
+### Create executables with Nuitka
 
-Make sure you have a clean virtualenv with only the packages from requirements.txt.
-First, install `imageio` to be able to convert the icon image. Then create a single executable.
-This will require additional components that Nuitka will guide you through.
+Make sure you have a clean virtualenv, otherwise you may get errors.
+Use the commands below to install the requirements and call Nuitka to build a single executable.
 
 ```
-python -m pip install imageio
+pip install -r requirements.txt
+pip install nuitka imageio
 
 python -m nuitka battle_map_tv/__main__.py --enable-plugin=pyside6 --onefile `
 --windows-console-mode=attach --windows-icon-from-ico=battle_map_tv/icon.png `
