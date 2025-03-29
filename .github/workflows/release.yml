@@ -31,7 +31,7 @@ jobs:
         --output-filename="battle-map-tv.exe"
 
     - name: Upload artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: battle-map-tv.exe
         path: ./battle_map_tv/battle-map-tv.exe
@@ -41,7 +41,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Download artifact
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v4
       with:
         name: battle-map-tv.exe
         path: ./dist
