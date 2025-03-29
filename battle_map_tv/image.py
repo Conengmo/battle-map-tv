@@ -19,6 +19,8 @@ from battle_map_tv.storage import (
 class CustomGraphicsPixmapItem(QGraphicsPixmapItem):
     def __init__(self, image_path: str):
         pixmap = QPixmap(image_path)
+        if pixmap.isNull():
+            raise ValueError(f"Failed to load '{image_path}'")
         super().__init__(pixmap)
         self.image_filename = os.path.basename(image_path)
         self.setFlag(self.GraphicsItemFlag.ItemIsMovable)
@@ -90,12 +92,7 @@ class Image:
                 ImageKeys.scale,
             )
         except KeyError:
-            scale_fit_image = min(
-                window_width_px / self.pixmap_item.pixmap().width(),
-                window_height_px / self.pixmap_item.pixmap().height(),
-            )
-            if scale_fit_image < 1.0:
-                self.scale(scale_fit_image)
+            self._fit_image_to_window(window_width_px, window_height_px)
         else:
             self.scale(scale)
 
@@ -108,6 +105,12 @@ class Image:
             self.center()
         else:
             self.pixmap_item.set_position(position)
+
+    def _fit_image_to_window(self, window_width_px: int, window_height_px: int):
+        image_width = self.pixmap_item.pixmap().width()
+        image_height = self.pixmap_item.pixmap().height()
+        scale = min(window_width_px / image_width, window_height_px / image_height)
+        self.scale(scale)
 
     def delete(self):
         self.scene.removeItem(self.pixmap_item)
