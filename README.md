@@ -105,4 +105,5 @@ python -m pip install imageio
 python -m nuitka battle_map_tv/__main__.py --enable-plugin=pyside6 --onefile `
 --windows-console-mode=attach --windows-icon-from-ico=battle_map_tv/icon.png `
 --include-data-files="battle_map_tv/icon.png=battle_map_tv/icon.png"
+--output-filename="battle-map-tv.exe"
 ```

@@ -1,0 +1,56 @@
+name: Release
+
+on:
+  release:
+    types: [created]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install -r requirements.txt -r requirements-dev.txt
+
+    - name: Build executable with Nuitka
+      run: |
+        python -m nuitka battle_map_tv/__main__.py --enable-plugin=pyside6 --onefile `
+        --windows-console-mode=attach --windows-icon-from-ico=battle_map_tv/icon.png `
+        --include-data-files="battle_map_tv/icon.png=battle_map_tv/icon.png"
+        --output-filename="battle-map-tv.exe"
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: battle-map-tv.exe
+        path: ./battle_map_tv/battle-map-tv.exe
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - name: Download artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: battle-map-tv.exe
+        path: ./dist
+
+    - name: Upload Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: ./dist/battle-map-tv.exe
+        asset_name: battle-map-tv.exe
+        asset_content_type: application/octet-stream
