@@ -28,15 +28,14 @@ class AreaOfEffectManager:
     def __init__(self, window: "ImageWindow", grid: Grid):
         self.window = window
         self.scene = window.scene()
+        self.grid = grid
         self._store: List[BaseShape] = []
         self.rasterize = False
-        self.snap_to_grid = False
         self.waiting_for: Optional[str] = None
         self.color = "white"
         self.start_point: Optional[Tuple[int, int]] = None
         self.temp_obj: Optional[BaseShape] = None
         self.callback: Optional[Callable] = None
-        self.grid = grid
         self._previous_size: Optional[float] = None
 
     def wait_for(self, shape: str, callback: Callable):
@@ -66,8 +65,7 @@ class AreaOfEffectManager:
             if self.temp_obj is not None:
                 self.temp_obj.remove()
             self.temp_obj = self._create_shape_obj(event=event)
-            if self.snap_to_grid:
-                assert self.grid
+            if self.grid.enable_snap:
                 assert self.temp_obj
                 self.temp_obj.add_label(x=event.pos().x(), y=event.pos().y(), grid=self.grid)
             return True
@@ -96,7 +94,7 @@ class AreaOfEffectManager:
         )
         shape_cls = shapes_dict[self.waiting_for]
         x1, y1 = self.start_point
-        if self.snap_to_grid:
+        if self.grid.enable_snap:
             x1, y1 = self.grid.snap_to_grid(x=x1, y=y1)
         shape_obj = shape_cls(
             x1=x1,
@@ -136,16 +134,16 @@ class BaseShape:
         if event.button() == Qt.RightButton:  # type: ignore[attr-defined]
             self.remove()
 
-    def _get_angle_radians(self, x1: int, y1: int, x2: int, y2: int, grid: Optional[Grid]) -> float:
+    def _get_angle_radians(self, x1: int, y1: int, x2: int, y2: int, grid: Grid) -> float:
         angle = math.atan2(y2 - y1, x2 - x1)
-        if grid is not None:
+        if grid.enable_snap:
             angle = round(angle * self.angle_snap_factor) / self.angle_snap_factor
         return angle
 
     @staticmethod
     def _calculate_size(x1: int, y1: int, x2: int, y2: int, grid: Optional[Grid]) -> float:
         size = math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
-        if grid is not None:
+        if grid and grid.enable_snap:
             size = grid.normalize_size(size=size)
         return size
 
@@ -192,7 +190,7 @@ class Circle(BaseShape):
         y1: int,
         x2: int,
         y2: int,
-        grid: Optional[Grid],
+        grid: Grid,
         scene: QGraphicsScene,
         size: Optional[float] = None,
     ):
@@ -213,11 +211,10 @@ class CircleRasterized(BaseShape):
         y1: int,
         x2: int,
         y2: int,
-        grid: Optional[Grid],
+        grid: Grid,
         scene: QGraphicsScene,
         size: Optional[float] = None,
     ):
-        assert grid is not None
         self.size: int = int(size or self._calculate_size(x1=x1, y1=y1, x2=x2, y2=y2, grid=grid))
         polygon = QPolygonF.fromList(
             [
@@ -238,7 +235,7 @@ class Square(BaseShape):
         y1: int,
         x2: int,
         y2: int,
-        grid: Optional[Grid],
+        grid: Grid,
         scene: QGraphicsScene,
         size: Optional[float] = None,
     ):
@@ -246,7 +243,7 @@ class Square(BaseShape):
             self.size = size
         else:
             self.size = self._calculate_size(x1=x1, y1=y1, x2=x2, y2=y2, grid=None) / math.sqrt(2)
-            if grid is not None:
+            if grid.enable_snap:
                 self.size = grid.normalize_size(size=self.size)
         angle = self._get_angle_radians(x1=x1, y1=y1, x2=x2, y2=y2, grid=grid)
         point_2 = (
@@ -274,7 +271,7 @@ class Cone(BaseShape):
         y1: int,
         x2: int,
         y2: int,
-        grid: Optional[Grid],
+        grid: Grid,
         scene: QGraphicsScene,
         size: Optional[float] = None,
     ):
@@ -293,11 +290,10 @@ class ConeRasterized(BaseShape):
         y1: int,
         x2: int,
         y2: int,
-        grid: Optional[Grid],
+        grid: Grid,
         scene: QGraphicsScene,
         size: Optional[float] = None,
     ):
-        assert grid is not None
         self.size: int = int(size or self._calculate_size(x1=x1, y1=y1, x2=x2, y2=y2, grid=grid))
         angle = self._get_angle_radians(x1=x1, y1=y1, x2=x2, y2=y2, grid=grid)
         polygon = QPolygonF.fromList(
@@ -317,7 +313,7 @@ class Line(BaseShape):
         y1: int,
         x2: int,
         y2: int,
-        grid: Optional[Grid],
+        grid: Grid,
         scene: QGraphicsScene,
         size: Optional[float] = None,
     ):

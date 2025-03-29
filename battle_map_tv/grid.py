@@ -15,6 +15,7 @@ if TYPE_CHECKING:
 class Grid:
     def __init__(self, window: "ImageWindow"):
         self.window = window
+        self.enable_snap: bool = False
 
         self.pixels_per_square: int = get_from_storage(StorageKeys.pixels_per_square, default=40)
         self.n_lines: Tuple[int, int]
