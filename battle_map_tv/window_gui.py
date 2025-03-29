@@ -189,7 +189,7 @@ class GuiWindow(QWidget):
                 self.image_window.remove_grid()
             else:
                 self.image_window.add_grid(color_value=slider_grid_color.value())
-            self.image_window.toggle_snap_to_grid_area_of_effect(enable=value)
+            self.image_window.grid.enable_snap = value
             global_event_dispatcher.dispatch_event(EventKeys.toggle_grid, value)
 
         button = StyledButton("Toggle grid", checkable=True)

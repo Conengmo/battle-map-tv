@@ -112,9 +112,6 @@ class ImageWindow(QGraphicsView):
     def cancel_area_of_effect(self):
         self.area_of_effect_manager.cancel()
 
-    def toggle_snap_to_grid_area_of_effect(self, enable: bool):
-        self.area_of_effect_manager.snap_to_grid = enable
-
     def toggle_rasterize_area_of_effect(self, enable: bool):
         self.area_of_effect_manager.rasterize = enable
 
