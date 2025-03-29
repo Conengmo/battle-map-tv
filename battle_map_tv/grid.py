@@ -1,16 +1,19 @@
 import math
-from typing import Optional, Tuple, List
+from typing import Optional, Tuple, List, TYPE_CHECKING
 
 from PySide6.QtCore import QLineF
 from PySide6.QtGui import QPen, QColor
-from PySide6.QtWidgets import QGraphicsView, QGraphicsItemGroup, QWidget
+from PySide6.QtWidgets import QGraphicsView, QGraphicsItemGroup
 
 from .utils import size_to_tuple
-from .storage import get_from_storage, StorageKeys, set_in_storage
+from .storage import get_from_storage, StorageKeys, set_in_storage, set_image_in_storage, ImageKeys
+
+if TYPE_CHECKING:
+    from .window_image import ImageWindow
 
 
 class Grid:
-    def __init__(self, window: QWidget):
+    def __init__(self, window: "ImageWindow"):
         self.window = window
 
         self.pixels_per_square: int = get_from_storage(StorageKeys.pixels_per_square, default=40)
@@ -40,7 +43,14 @@ class Grid:
 
     def set_size(self, value: int):
         self.pixels_per_square = value
-        set_in_storage(StorageKeys.pixels_per_square, value)
+        if self.window.image is not None:
+            set_image_in_storage(
+                image_filename=self.window.image.image_filename,
+                key=ImageKeys.grid_pixels_per_square,
+                value=value,
+            )
+        else:
+            set_in_storage(StorageKeys.pixels_per_square, value)
         self.calculate()
 
     def get_lines(self, axis: int) -> List[Tuple[int, int, int, int]]:

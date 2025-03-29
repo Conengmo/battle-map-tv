@@ -8,7 +8,7 @@ from battle_map_tv.aoe import AreaOfEffectManager
 from battle_map_tv.grid import GridOverlay, Grid
 from battle_map_tv.image import Image
 from battle_map_tv.initiative import InitiativeOverlayManager
-from battle_map_tv.storage import get_from_storage, StorageKeys
+from battle_map_tv.storage import get_from_storage, StorageKeys, ImageKeys, get_image_from_storage
 from battle_map_tv.ui_elements import get_window_icon
 
 
@@ -52,6 +52,8 @@ class ImageWindow(QGraphicsView):
             window_width_px=self.width(),
             window_height_px=self.height(),
         )
+        if self.grid_overlay is not None:
+            self.add_grid(color_value=self.grid_overlay.color_value)
 
     def remove_image(self):
         if self.image is not None:
@@ -70,6 +72,14 @@ class ImageWindow(QGraphicsView):
     def add_grid(self, color_value: int):
         if self.grid_overlay is not None:
             self.remove_grid()
+        if self.image is not None:
+            pixels_per_square = get_image_from_storage(
+                image_filename=self.image.image_filename,
+                key=ImageKeys.grid_pixels_per_square,
+                default=None,
+            )
+            if pixels_per_square:
+                self.grid.set_size(pixels_per_square)
         self.grid_overlay = GridOverlay(window=self, grid=self.grid, color_value=color_value)
 
     def update_screen_size_mm(self):
