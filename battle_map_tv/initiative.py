@@ -1,5 +1,5 @@
 import re
-from typing import Dict, Optional, List
+from typing import Dict, Optional, List, Tuple
 
 from PySide6.QtGui import QFont, QColor, Qt
 from PySide6.QtWidgets import QGraphicsScene, QGraphicsTextItem, QGraphicsRectItem
@@ -16,9 +16,13 @@ class InitiativeOverlayManager:
     def create(self, text: str):
         self.clear()
         if text:
+            positions: Tuple[int, int] = get_from_storage(
+                key=StorageKeys.initiative_positions,
+                default=(0, 4),
+            )
             self.overlays = [
-                InitiativeOverlay(text, self.scene, self.font_size).move(position=0),
-                InitiativeOverlay(text, self.scene, self.font_size).move(position=4),
+                InitiativeOverlay(text, self.scene, self.font_size).move(position=positions[0]),
+                InitiativeOverlay(text, self.scene, self.font_size).move(position=positions[1]),
             ]
 
     def change_font_size(self, by: int):
@@ -32,6 +36,8 @@ class InitiativeOverlayManager:
     def move(self):
         for overlay in self.overlays:
             overlay.move()
+        new_positions = (self.overlays[0].position, self.overlays[1].position)
+        set_in_storage(StorageKeys.initiative_positions, new_positions)
 
     def clear(self):
         for overlay in self.overlays:
