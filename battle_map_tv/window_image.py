@@ -1,7 +1,7 @@
 from typing import Optional, Callable
 
 from PySide6.QtCore import Qt
-from PySide6.QtGui import QMouseEvent
+from PySide6.QtGui import QMouseEvent, QImageReader
 from PySide6.QtWidgets import QGraphicsView, QGraphicsScene
 
 from battle_map_tv.aoe import AreaOfEffectManager
@@ -26,6 +26,8 @@ class ImageWindow(QGraphicsView):
         self.setAlignment(Qt.AlignCenter)  # type: ignore[attr-defined]
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)  # type: ignore[attr-defined]
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)  # type: ignore[attr-defined]
+        # allow for large size images
+        QImageReader.setAllocationLimit(0)
 
         scene = QGraphicsScene()
         scene.setSceneRect(0, 0, self.size().width(), self.size().height())
