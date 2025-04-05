@@ -10,8 +10,8 @@ from PySide6.QtWidgets import (
     QApplication,
 )
 
-from battle_map_tv.aoe import area_of_effect_shapes_to_class
-from battle_map_tv.events import global_event_dispatcher, EventKeys
+from .area_of_effect import area_of_effect_shapes_to_class
+from .events import global_event_dispatcher, EventKeys
 from .elements import get_window_icon
 from .elements.widgets import ColorSelectionWindow
 from .elements.layouts import FixedRowGridLayout
