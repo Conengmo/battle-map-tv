@@ -45,6 +45,7 @@ class AreaOfEffectManager:
     def cancel(self):
         if self.temp_obj is not None:
             self.temp_obj.remove()
+            self.temp_obj = None
         self.waiting_for = None
         self.start_point = None
         self.callback = None
