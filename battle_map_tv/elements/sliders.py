@@ -1,7 +1,7 @@
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QHBoxLayout, QGridLayout, QSlider
 from PySide6.QtCore import Signal, Qt
 
-from .text_based import StyledLineEdit
+from battle_map_tv.elements.text_based import StyledLineEdit
 
 
 class DualScaleSlider(QWidget):
