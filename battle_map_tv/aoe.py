@@ -75,8 +75,6 @@ class AreaOfEffectManager:
     def mouse_release_event(self, event: QMouseEvent) -> bool:
         if self.waiting_for is not None:
             assert self.callback
-            if self.temp_obj is not None:
-                self.temp_obj.remove()
             shape_obj = self._create_shape_obj(event=event)
             shape_obj.set_is_movable()
             self._store.append(shape_obj)
