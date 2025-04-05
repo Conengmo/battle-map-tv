@@ -1,7 +1,7 @@
 import math
 from typing import Optional, Callable, List, Tuple, TYPE_CHECKING
 
-from PySide6.QtCore import QPointF
+from PySide6.QtCore import QPointF, QObject, Signal
 from PySide6.QtGui import QColor, QPen, QBrush, QMouseEvent, Qt, QPolygonF, QTransform, QFont
 from PySide6.QtWidgets import (
     QGraphicsEllipseItem,
@@ -105,18 +105,22 @@ class AreaOfEffectManager:
             size=self._previous_size if event.modifiers() == Qt.ShiftModifier else None,  # type: ignore[attr-defined]
         )
         shape_obj.set_color(color=self.color)
+        shape_obj.on_right_click.connect(lambda _shape: self._store.remove(_shape))
         self._previous_size = shape_obj.size
         return shape_obj
 
 
-class BaseShape:
+class BaseShape(QObject):
     shape: QAbstractGraphicsShapeItem
     label: QGraphicsTextItem
     label_background: QGraphicsRectItem
     size: float
     angle_snap_factor = 32 / 2 / math.pi
 
+    on_right_click = Signal(object)
+
     def __init__(self, scene: QGraphicsScene):
+        super().__init__()
         self.shape.mousePressEvent = self._mouse_press_event  # type: ignore[method-assign]
         self.scene = scene
         self.scene.addItem(self.shape)
@@ -132,6 +136,7 @@ class BaseShape:
     def _mouse_press_event(self, event: QGraphicsSceneMouseEvent):
         if event.button() == Qt.RightButton:  # type: ignore[attr-defined]
             self.remove()
+            self.on_right_click.emit(self)
 
     def _get_angle_radians(self, x1: int, y1: int, x2: int, y2: int, grid: Grid) -> float:
         angle = math.atan2(y2 - y1, x2 - x1)
