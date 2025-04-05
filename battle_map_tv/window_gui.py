@@ -12,15 +12,12 @@ from PySide6.QtWidgets import (
 
 from battle_map_tv.aoe import area_of_effect_shapes_to_class
 from battle_map_tv.events import global_event_dispatcher, EventKeys
-from battle_map_tv.ui_elements import (
-    StyledButton,
-    StyledSlider,
-    get_window_icon,
-    StyledTextEdit,
-    ColorSelectionWindow,
-    FixedRowGridLayout,
-)
-from .elements.dual_scale_slider import DualScaleSlider
+from .elements import get_window_icon
+from .elements.widgets import ColorSelectionWindow
+from .elements.layouts import FixedRowGridLayout
+from .elements.sliders import StyledSlider, DualScaleSlider
+from .elements.buttons import StyledButton
+from .elements.text_based import StyledTextEdit
 from .window_image import ImageWindow
 from .grid import GridOverlayColor
 
