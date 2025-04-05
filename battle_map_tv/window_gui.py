@@ -10,16 +10,16 @@ from PySide6.QtWidgets import (
     QApplication,
 )
 
-from .area_of_effect import area_of_effect_shapes_to_class
-from .events import global_event_dispatcher, EventKeys
-from .elements import get_window_icon
-from .elements.widgets import ColorSelectionWindow
-from .elements.layouts import FixedRowGridLayout
-from .elements.sliders import StyledSlider, DualScaleSlider
-from .elements.buttons import StyledButton
-from .elements.text_based import StyledTextEdit
-from .window_image import ImageWindow
-from .grid import GridOverlayColor
+from battle_map_tv.area_of_effect import area_of_effect_shapes_to_class
+from battle_map_tv.events import global_event_dispatcher, EventKeys
+from battle_map_tv.elements import get_window_icon
+from battle_map_tv.elements.widgets import ColorSelectionWindow
+from battle_map_tv.elements.layouts import FixedRowGridLayout
+from battle_map_tv.elements.sliders import StyledSlider, DualScaleSlider
+from battle_map_tv.elements.buttons import StyledButton
+from battle_map_tv.elements.text_based import StyledTextEdit
+from battle_map_tv.window_image import ImageWindow
+from battle_map_tv.grid import GridOverlayColor
 
 
 class GuiWindow(QWidget):

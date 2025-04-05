@@ -2,11 +2,11 @@ from typing import List, Optional, Tuple, Callable, TYPE_CHECKING
 
 from PySide6.QtGui import QMouseEvent, Qt
 
-from . import (
+from battle_map_tv.area_of_effect import (
     area_of_effect_shapes_to_class,
     area_of_effect_rasterized_shapes_to_class,
 )
-from .base_shape import BaseShape
+from battle_map_tv.area_of_effect.base_shape import BaseShape
 from battle_map_tv.grid import Grid
 
 if TYPE_CHECKING:
