@@ -2,8 +2,8 @@ from typing import TYPE_CHECKING
 
 from PySide6.QtWidgets import QApplication
 
-from battle_map_tv.widgets.buttons import StyledButton
 from battle_map_tv.layouts.base import HorizontalLayout
+from battle_map_tv.widgets.buttons import StyledButton
 
 if TYPE_CHECKING:
     from battle_map_tv.window_image import ImageWindow
