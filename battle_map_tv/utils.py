@@ -1,6 +1,6 @@
-from typing import TYPE_CHECKING, Optional, Tuple
+from typing import TYPE_CHECKING, Optional, Tuple, Type
 
-from PySide6.QtCore import QSize
+from PySide6.QtCore import QObject, QSize
 from PySide6.QtWidgets import QApplication
 
 if TYPE_CHECKING:
@@ -31,3 +31,13 @@ def get_image_window_size_px() -> Tuple[int, int]:
 def get_image_filename() -> Optional[str]:
     image_window = get_image_window()
     return image_window.image.image_filename if image_window.image else None
+
+
+def find_child_by_attribute(parent: QObject, child_type: Type[QObject], text: str):
+    child: QObject
+    for child in parent.findChildren(child_type):
+        if text and child.text() == text:  # type: ignore
+            return child
+    raise AttributeError(
+        f"Could not find child of type {child_type} with text '{text}' in {parent}"
+    )
