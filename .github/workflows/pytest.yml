@@ -38,4 +38,4 @@ jobs:
 
     - name: Run tests with Pytest
       run: |
-        xvfb-run -a pytest -vv
+        pytest . -vv
