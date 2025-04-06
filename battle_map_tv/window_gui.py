@@ -20,6 +20,8 @@ from battle_map_tv.widgets.buttons import StyledButton
 from battle_map_tv.widgets.sliders import DualScaleSlider, StyledSlider
 from battle_map_tv.widgets.text_based import StyledTextEdit
 from battle_map_tv.window_image import ImageWindow
+from battle_map_tv.grid import GridOverlayColor
+from battle_map_tv.layouts.app_controls import AppControlsLayout
 
 
 class GuiWindow(QWidget):
@@ -58,7 +60,9 @@ class GuiWindow(QWidget):
         self.add_row_scale_slider()
         self.add_row_grid()
         self.add_row_area_of_effect()
-        self.add_row_app_controls()
+        self._layout.addLayout(
+            AppControlsLayout(image_window=image_window, app=app)
+        )
 
         # take focus away from the text area
         self.setFocus()
@@ -73,17 +77,6 @@ class GuiWindow(QWidget):
         container.setSpacing(20)
         self._layout.addLayout(container)
         return container
-
-    def add_row_app_controls(self):
-        container = self._create_container()
-
-        button = StyledButton("Fullscreen")
-        button.clicked.connect(self.image_window.toggle_fullscreen)
-        container.addWidget(button)
-
-        button = StyledButton("Exit")
-        button.clicked.connect(self.app.quit)
-        container.addWidget(button)
 
     def add_row_image_buttons(self):
         container = self._create_container()

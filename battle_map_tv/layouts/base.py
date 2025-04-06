@@ -1,4 +1,11 @@
-from PySide6.QtWidgets import QGridLayout
+from PySide6.QtWidgets import QGridLayout, QHBoxLayout
+
+
+class HorizontalLayout(QHBoxLayout):
+
+    def __init__(self):
+        super().__init__()
+        self.setSpacing(20)
 
 
 class FixedRowGridLayout(QGridLayout):
