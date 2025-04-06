@@ -5,6 +5,9 @@ check_untyped_defs = true
 [tool.ruff]
 line-length = 100
 
+[tool.ruff.lint]
+select = ["I"]
+
 [tool.hatch]
 
 [tool.hatch.build]
