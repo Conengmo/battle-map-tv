@@ -4,15 +4,15 @@ from typing import Tuple
 from PySide6.QtGui import QPixmap
 from PySide6.QtWidgets import QGraphicsPixmapItem, QGraphicsScene
 
-from battle_map_tv.events import global_event_dispatcher, EventKeys
+from battle_map_tv.events import EventKeys, global_event_dispatcher
 from battle_map_tv.grid import Grid
 from battle_map_tv.scale_detection import find_image_scale
 from battle_map_tv.storage import (
-    set_image_in_storage,
     ImageKeys,
-    get_image_from_storage,
-    set_in_storage,
     StorageKeys,
+    get_image_from_storage,
+    set_image_in_storage,
+    set_in_storage,
 )
 
 

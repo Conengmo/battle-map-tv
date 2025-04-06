@@ -3,7 +3,7 @@ from typing import Optional
 
 from PySide6.QtCore import QPointF
 from PySide6.QtGui import QPolygonF
-from PySide6.QtWidgets import QGraphicsScene, QGraphicsPolygonItem
+from PySide6.QtWidgets import QGraphicsPolygonItem, QGraphicsScene
 
 from battle_map_tv.area_of_effect.base_shape import BaseShape
 from battle_map_tv.grid import Grid

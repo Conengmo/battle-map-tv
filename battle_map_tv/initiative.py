@@ -1,10 +1,10 @@
 import re
-from typing import Dict, Optional, List, Tuple
+from typing import Dict, List, Optional, Tuple
 
-from PySide6.QtGui import QFont, QColor, Qt
-from PySide6.QtWidgets import QGraphicsScene, QGraphicsTextItem, QGraphicsRectItem
+from PySide6.QtGui import QColor, QFont, Qt
+from PySide6.QtWidgets import QGraphicsRectItem, QGraphicsScene, QGraphicsTextItem
 
-from battle_map_tv.storage import get_from_storage, StorageKeys, set_in_storage
+from battle_map_tv.storage import StorageKeys, get_from_storage, set_in_storage
 
 
 class InitiativeOverlayManager:

@@ -2,13 +2,13 @@ import math
 from typing import Optional
 
 from PySide6.QtCore import QObject, Signal
-from PySide6.QtGui import Qt, QColor, QPen, QBrush, QFont
+from PySide6.QtGui import QBrush, QColor, QFont, QPen, Qt
 from PySide6.QtWidgets import (
     QAbstractGraphicsShapeItem,
-    QGraphicsTextItem,
     QGraphicsRectItem,
     QGraphicsScene,
     QGraphicsSceneMouseEvent,
+    QGraphicsTextItem,
 )
 
 from battle_map_tv.grid import Grid

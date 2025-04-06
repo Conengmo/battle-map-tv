@@ -1,11 +1,11 @@
 import math
 from collections import defaultdict
-from typing import Optional, List, Tuple, Set
+from typing import List, Optional, Set, Tuple
 
 import numpy as np
 from PySide6.QtCore import QPointF
 from PySide6.QtGui import QPolygonF
-from PySide6.QtWidgets import QGraphicsScene, QGraphicsPolygonItem
+from PySide6.QtWidgets import QGraphicsPolygonItem, QGraphicsScene
 
 from battle_map_tv.area_of_effect.base_shape import BaseShape
 from battle_map_tv.grid import Grid

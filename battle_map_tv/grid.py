@@ -1,18 +1,18 @@
 import math
-from typing import Optional, Tuple, List, TYPE_CHECKING
+from typing import TYPE_CHECKING, List, Optional, Tuple
 
 from PySide6.QtCore import QLineF
-from PySide6.QtGui import QPen, QColor
-from PySide6.QtWidgets import QGraphicsView, QGraphicsItemGroup
+from PySide6.QtGui import QColor, QPen
+from PySide6.QtWidgets import QGraphicsItemGroup, QGraphicsView
 
-from battle_map_tv.utils import size_to_tuple
 from battle_map_tv.storage import (
-    get_from_storage,
-    StorageKeys,
-    set_in_storage,
-    set_image_in_storage,
     ImageKeys,
+    StorageKeys,
+    get_from_storage,
+    set_image_in_storage,
+    set_in_storage,
 )
+from battle_map_tv.utils import size_to_tuple
 
 if TYPE_CHECKING:
     from battle_map_tv.window_image import ImageWindow

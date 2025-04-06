@@ -1,14 +1,14 @@
-from typing import Optional, Callable
+from typing import Callable, Optional
 
 from PySide6.QtCore import Qt
-from PySide6.QtGui import QMouseEvent, QImageReader
-from PySide6.QtWidgets import QGraphicsView, QGraphicsScene
+from PySide6.QtGui import QImageReader, QMouseEvent
+from PySide6.QtWidgets import QGraphicsScene, QGraphicsView
 
 from battle_map_tv.area_of_effect.manager import AreaOfEffectManager
-from battle_map_tv.grid import GridOverlay, Grid
+from battle_map_tv.grid import Grid, GridOverlay
 from battle_map_tv.image import Image
 from battle_map_tv.initiative import InitiativeOverlayManager
-from battle_map_tv.storage import get_from_storage, StorageKeys, ImageKeys, get_image_from_storage
+from battle_map_tv.storage import ImageKeys, StorageKeys, get_from_storage, get_image_from_storage
 from battle_map_tv.widgets import get_window_icon
 
 
