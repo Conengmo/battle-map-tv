@@ -3,4 +3,5 @@ hatch-vcs
 mypy
 pre-commit
 pytest
+pytest-qt
 ruff
