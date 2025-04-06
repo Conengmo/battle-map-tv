@@ -1,10 +1,9 @@
 import math
-from typing import Optional, List, Tuple
+from typing import List, Optional, Tuple
 
 from PySide6.QtCore import QPointF
 from PySide6.QtGui import QPolygonF
-
-from PySide6.QtWidgets import QGraphicsScene, QGraphicsEllipseItem, QGraphicsPolygonItem
+from PySide6.QtWidgets import QGraphicsEllipseItem, QGraphicsPolygonItem, QGraphicsScene
 
 from battle_map_tv.area_of_effect.base_shape import BaseShape
 from battle_map_tv.grid import Grid

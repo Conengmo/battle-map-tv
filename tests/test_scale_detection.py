@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from battle_map_tv.scale_detection import merge_close_together_lines, find_image_scale
+from battle_map_tv.scale_detection import find_image_scale, merge_close_together_lines
 
 
 def test_merge_close_together_lines():

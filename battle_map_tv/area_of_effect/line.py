@@ -2,7 +2,7 @@ import math
 from typing import Optional
 
 from PySide6.QtGui import QTransform
-from PySide6.QtWidgets import QGraphicsScene, QGraphicsRectItem
+from PySide6.QtWidgets import QGraphicsRectItem, QGraphicsScene
 
 from battle_map_tv.area_of_effect.base_shape import BaseShape
 from battle_map_tv.grid import Grid
