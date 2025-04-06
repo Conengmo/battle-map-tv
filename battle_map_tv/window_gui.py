@@ -60,9 +60,7 @@ class GuiWindow(QWidget):
         self.add_row_scale_slider()
         self.add_row_grid()
         self.add_row_area_of_effect()
-        self._layout.addLayout(
-            AppControlsLayout(image_window=image_window, app=app)
-        )
+        self._layout.addLayout(AppControlsLayout(image_window=image_window, app=app))
 
         # take focus away from the text area
         self.setFocus()

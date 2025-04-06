@@ -1,4 +1,4 @@
-from typing import Callable, TYPE_CHECKING
+from typing import TYPE_CHECKING
 
 from PySide6.QtWidgets import QApplication
 
@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 class AppControlsLayout(HorizontalLayout):
     """A horizontal layout with buttons to control the application."""
 
-    def __init__(self, image_window: 'ImageWindow', app: QApplication):
+    def __init__(self, image_window: "ImageWindow", app: QApplication):
         super().__init__()
         button = StyledButton("Fullscreen")
         button.clicked.connect(image_window.toggle_fullscreen)
