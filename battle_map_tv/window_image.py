@@ -9,7 +9,7 @@ from battle_map_tv.grid import GridOverlay, Grid
 from battle_map_tv.image import Image
 from battle_map_tv.initiative import InitiativeOverlayManager
 from battle_map_tv.storage import get_from_storage, StorageKeys, ImageKeys, get_image_from_storage
-from battle_map_tv.elements import get_window_icon
+from battle_map_tv.widgets import get_window_icon
 
 
 class ImageWindow(QGraphicsView):

@@ -1,16 +1,12 @@
 from typing import Callable
 
-from PySide6.QtWidgets import QWidget
-
-from battle_map_tv.elements.buttons import ColorSelectionButton
-from battle_map_tv.elements.layouts import FixedRowGridLayout
+from battle_map_tv.layouts.base import FixedRowGridLayout
+from battle_map_tv.widgets.buttons import ColorSelectionButton
 
 
-class ColorSelectionWindow(QWidget):
+class ColorSelectionWindow(FixedRowGridLayout):
     def __init__(self, callback: Callable):
-        super().__init__()
-        grid = FixedRowGridLayout(rows=2)
-        self.setLayout(grid)
+        super().__init__(rows=2)
         self.colors = [
             "#ff3d00",
             "#48ABB4",
@@ -25,7 +21,7 @@ class ColorSelectionWindow(QWidget):
         for color in self.colors:
             button = ColorSelectionButton(color=color)
             button.clicked.connect(self.create_color_selected_handler(color, callback))
-            grid.add_widget(button)
+            self.add_widget(button)
             self.buttons.append(button)
         self.selected_color: str
         self.buttons[-1].click()

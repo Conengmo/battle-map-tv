@@ -12,12 +12,12 @@ from PySide6.QtWidgets import (
 
 from battle_map_tv.area_of_effect import area_of_effect_shapes_to_class
 from battle_map_tv.events import global_event_dispatcher, EventKeys
-from battle_map_tv.elements import get_window_icon
-from battle_map_tv.elements.widgets import ColorSelectionWindow
-from battle_map_tv.elements.layouts import FixedRowGridLayout
-from battle_map_tv.elements.sliders import StyledSlider, DualScaleSlider
-from battle_map_tv.elements.buttons import StyledButton
-from battle_map_tv.elements.text_based import StyledTextEdit
+from battle_map_tv.widgets import get_window_icon
+from battle_map_tv.layouts.area_of_effect import ColorSelectionWindow
+from battle_map_tv.layouts.base import FixedRowGridLayout
+from battle_map_tv.widgets.sliders import StyledSlider, DualScaleSlider
+from battle_map_tv.widgets.buttons import StyledButton
+from battle_map_tv.widgets.text_based import StyledTextEdit
 from battle_map_tv.window_image import ImageWindow
 from battle_map_tv.grid import GridOverlayColor
 
@@ -197,7 +197,7 @@ class GuiWindow(QWidget):
         container = self._create_container()
 
         color_selector = ColorSelectionWindow(callback=self.image_window.area_of_effect_set_color)
-        container.addWidget(color_selector)
+        container.addLayout(color_selector)
 
         def get_area_of_effect_callback(_shape: str, _button: StyledButton):
             def callback():
