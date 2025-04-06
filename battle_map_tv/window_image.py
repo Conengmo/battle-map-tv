@@ -42,8 +42,7 @@ class ImageWindow(QGraphicsView):
 
     def toggle_fullscreen(self):
         if self.isFullScreen():
-            # self.showNormal()
-            pass
+            self.showNormal()
         else:
             self.showFullScreen()
 
