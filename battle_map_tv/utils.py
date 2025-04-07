@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Tuple
+from typing import TYPE_CHECKING, Optional, Tuple
 
 from PySide6.QtCore import QSize
 from PySide6.QtWidgets import QApplication
@@ -21,3 +21,13 @@ def get_image_window() -> "ImageWindow":
         if widget.objectName() == "image_window":
             return widget  # type: ignore[return-value]
     raise RuntimeError("Could not find ImageWindow instance.")
+
+
+def get_image_window_size_px() -> Tuple[int, int]:
+    image_window = get_image_window()
+    return size_to_tuple(image_window.size())
+
+
+def get_image_filename() -> Optional[str]:
+    image_window = get_image_window()
+    return image_window.image.image_filename if image_window.image else None

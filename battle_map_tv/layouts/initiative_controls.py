@@ -27,7 +27,6 @@ class InitiativeTextArea(StyledTextEdit):
             self.image_window.add_initiative(text)
 
 
-
 class InitiativeButtons(HorizontalLayout):
     def __init__(self):
         super().__init__()

@@ -35,7 +35,7 @@ class ImageWindow(QGraphicsView):
         self.setScene(scene)
 
         self.image: Optional[Image] = None
-        self.grid = Grid(window=self)
+        self.grid = Grid()
         self.grid_overlay: Optional[GridOverlay] = None
         self.initiative_overlay_manager = InitiativeOverlayManager(scene=scene)
         self.area_of_effect_manager = AreaOfEffectManager(window=self, grid=self.grid)
