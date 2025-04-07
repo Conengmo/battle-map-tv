@@ -1,10 +1,6 @@
 from typing import Optional
 
 
-class Undefined:
-    pass
-
-
 class Settings:
     _instance = None
 
