@@ -5,6 +5,7 @@ from PySide6.QtGui import QImageReader, QMouseEvent
 from PySide6.QtWidgets import QGraphicsScene, QGraphicsView
 
 from battle_map_tv.area_of_effect.manager import AreaOfEffectManager
+from battle_map_tv.events import EventKeys, global_event_dispatcher
 from battle_map_tv.grid import Grid, GridOverlay
 from battle_map_tv.image import Image
 from battle_map_tv.initiative import InitiativeOverlayManager
@@ -97,15 +98,26 @@ class ImageWindow(QGraphicsView):
             if pixels_per_square:
                 self.grid.set_size(pixels_per_square)
         self.grid_overlay = GridOverlay(window=self, grid=self.grid, color_value=color_value)
+        self.grid.enable_snap = True
 
     def update_screen_size_mm(self):
         if self.grid_overlay is not None:
             self.grid_overlay.reset()
 
+    def scale_grid(self, value: int):
+        self.grid.set_size(value)
+        if self.grid_overlay is not None:
+            self.grid_overlay.reset()
+
+    def change_grid_color(self, value: int):
+        if self.grid_overlay is not None:
+            self.grid_overlay.update_color(value)
+
     def remove_grid(self):
         if self.grid_overlay is not None:
             self.grid_overlay.delete()
             self.grid_overlay = None
+            self.grid.enable_snap = False
 
     def add_initiative(self, text: str):
         self.initiative_overlay_manager.create(text=text)

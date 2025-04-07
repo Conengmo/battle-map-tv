@@ -16,6 +16,7 @@ from battle_map_tv.grid import GridOverlayColor
 from battle_map_tv.layouts.app_controls import AppControlsLayout
 from battle_map_tv.layouts.area_of_effect import ColorSelectionWindow
 from battle_map_tv.layouts.base import FixedRowGridLayout
+from battle_map_tv.layouts.grid_controls import GridControls
 from battle_map_tv.layouts.image_controls import ImageButtonsLayout, ImageScaleSlidersLayout
 from battle_map_tv.widgets import get_window_icon
 from battle_map_tv.widgets.buttons import StyledButton
@@ -59,7 +60,7 @@ class GuiWindow(QWidget):
             ImageButtonsLayout(image_window=image_window, default_directory=default_directory)
         )
         self._layout.addLayout(ImageScaleSlidersLayout(image_window=image_window))
-        self.add_row_grid()
+        self._layout.addLayout(GridControls(image_window=image_window))
         self.add_row_area_of_effect()
         self._layout.addLayout(AppControlsLayout(image_window=image_window, app=app))
 
@@ -76,48 +77,6 @@ class GuiWindow(QWidget):
         container.setSpacing(20)
         self._layout.addLayout(container)
         return container
-
-    def add_row_grid(self):
-        container = self._create_container()
-
-        label = QLabel("Grid scale")
-        container.addWidget(label)
-
-        def slider_grid_size_callback(value: int):
-            self.image_window.grid.set_size(value)
-            if self.image_window.grid_overlay is not None:
-                self.image_window.grid_overlay.reset()
-
-        slider_grid_size = StyledSlider(
-            lower=10, upper=400, default=self.image_window.grid.pixels_per_square
-        )
-        slider_grid_size.valueChanged.connect(slider_grid_size_callback)
-        container.addWidget(slider_grid_size)
-
-        def slider_grid_color_callback(value: int):
-            if self.image_window.grid_overlay is not None:
-                self.image_window.grid_overlay.update_color(value)
-
-        label = QLabel("Grid color")
-        container.addWidget(label)
-
-        slider_grid_color = StyledSlider(
-            lower=GridOverlayColor.min, upper=GridOverlayColor.max, default=GridOverlayColor.default
-        )
-        slider_grid_color.valueChanged.connect(slider_grid_color_callback)
-        container.addWidget(slider_grid_color)
-
-        def toggle_grid_callback(value: bool):
-            if self.image_window.grid_overlay is not None:
-                self.image_window.remove_grid()
-            else:
-                self.image_window.add_grid(color_value=slider_grid_color.value())
-            self.image_window.grid.enable_snap = value
-            global_event_dispatcher.dispatch_event(EventKeys.toggle_grid, value)
-
-        button = StyledButton("Toggle grid", checkable=True)
-        button.clicked.connect(toggle_grid_callback)
-        container.addWidget(button)
 
     def add_row_area_of_effect(self):
         container = self._create_container()
