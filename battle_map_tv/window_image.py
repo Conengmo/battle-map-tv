@@ -81,6 +81,10 @@ class ImageWindow(QGraphicsView):
         if self.image is not None:
             self.image.autoscale(grid=self.grid)
 
+    def scale_image(self, value: int, dispatch_event: bool = False):
+        if self.image is not None:
+            self.image.scale(value, dispatch_event=dispatch_event)
+
     def add_grid(self, color_value: int):
         if self.grid_overlay is not None:
             self.remove_grid()

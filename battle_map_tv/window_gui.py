@@ -16,7 +16,7 @@ from battle_map_tv.grid import GridOverlayColor
 from battle_map_tv.layouts.app_controls import AppControlsLayout
 from battle_map_tv.layouts.area_of_effect import ColorSelectionWindow
 from battle_map_tv.layouts.base import FixedRowGridLayout
-from battle_map_tv.layouts.image_controls import ImageButtonsLayout
+from battle_map_tv.layouts.image_controls import ImageButtonsLayout, ImageScaleSlidersLayout
 from battle_map_tv.widgets import get_window_icon
 from battle_map_tv.widgets.buttons import StyledButton
 from battle_map_tv.widgets.sliders import DualScaleSlider, StyledSlider
@@ -58,7 +58,7 @@ class GuiWindow(QWidget):
         self._layout.addLayout(
             ImageButtonsLayout(image_window=image_window, default_directory=default_directory)
         )
-        self.add_row_scale_slider()
+        self._layout.addLayout(ImageScaleSlidersLayout(image_window=image_window))
         self.add_row_grid()
         self.add_row_area_of_effect()
         self._layout.addLayout(AppControlsLayout(image_window=image_window, app=app))
@@ -76,22 +76,6 @@ class GuiWindow(QWidget):
         container.setSpacing(20)
         self._layout.addLayout(container)
         return container
-
-    def add_row_scale_slider(self):
-        container = self._create_container()
-
-        def slider_scale_callback(value: int):
-            if self.image_window.image is not None:
-                self.image_window.image.scale(value, dispatch_event=False)
-
-        slider = DualScaleSlider()
-        slider.scale_changed.connect(slider_scale_callback)
-        container.addWidget(slider)
-
-        global_event_dispatcher.add_handler(
-            event_type=EventKeys.change_scale,
-            handler=slider.update_sliders_from_scale,
-        )
 
     def add_row_grid(self):
         container = self._create_container()
