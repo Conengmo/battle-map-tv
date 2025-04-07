@@ -1,27 +1,28 @@
-from typing import Optional
+from typing import Any, Callable, Dict, Generic, Optional, Type, TypeVar
+
+T = TypeVar("T")
+
+
+class classproperty(Generic[T]):
+    def __init__(self, func: Callable[[Any], T]) -> None:
+        self.func = func
+
+    def __get__(self, instance: Any, owner: Any) -> T:
+        return self.func(owner)
 
 
 class Settings:
-    _instance = None
+    _values: Dict[str, Optional[str]] = {}
+
+    def __init__(self):
+        raise TypeError("This class cannot be initialized.")
 
     @classmethod
     def create(cls, default_directory: Optional[str]):
-        if cls._instance is not None:
-            raise ValueError("Settings were already initialized.")
-        cls._instance = super(Settings, cls).__new__(cls)
-        cls._instance.__init__(default_directory=default_directory)
+        if cls._values:
+            raise ValueError("Settings have already been initialized.")
+        cls._values["default_directory"] = default_directory
 
-    def __new__(cls):
-        if cls._instance is None:
-            raise ValueError("Settings should first be initialized with 'create'.")
-        return cls._instance
-
-    def __init__(self, **kwargs):
-        if not hasattr(self, "_settings"):
-            self._settings = dict(kwargs)
-
-    @classmethod
-    @property
+    @classproperty
     def default_directory(cls) -> Optional[str]:
-        """Where to look for battle map files by default."""
-        return cls._instance._settings["default_directory"]
+        return cls._values["default_directory"]
