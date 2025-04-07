@@ -111,7 +111,6 @@ class GridOverlay:
         self.grid = grid
         self.color_value = color_value
 
-        self.view = QGraphicsView()
         self.group: Optional[QGraphicsItemGroup] = None
         self.reset()
 
