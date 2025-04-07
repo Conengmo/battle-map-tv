@@ -3,18 +3,13 @@ from typing import Optional
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
     QApplication,
-    QFileDialog,
     QHBoxLayout,
-    QLabel,
     QVBoxLayout,
     QWidget,
 )
 
-from battle_map_tv.area_of_effect import area_of_effect_shapes_to_class
-from battle_map_tv.events import EventKeys, global_event_dispatcher
 from battle_map_tv.layouts.app_controls import AppControlsLayout
-from battle_map_tv.layouts.area_of_effect import ColorSelectionWindow
-from battle_map_tv.layouts.base import FixedRowGridLayout
+from battle_map_tv.layouts.area_of_effect_controls import AreaOfEffectControls
 from battle_map_tv.layouts.grid_controls import GridControls
 from battle_map_tv.layouts.image_controls import ImageButtonsLayout, ImageScaleSlidersLayout
 from battle_map_tv.widgets import get_window_icon
@@ -59,7 +54,7 @@ class GuiWindow(QWidget):
         )
         self._layout.addLayout(ImageScaleSlidersLayout(image_window=image_window))
         self._layout.addLayout(GridControls(image_window=image_window))
-        self.add_row_area_of_effect()
+        self._layout.addLayout(AreaOfEffectControls(image_window=image_window))
         self._layout.addLayout(AppControlsLayout(image_window=image_window, app=app))
 
         # take focus away from the text area
@@ -75,57 +70,6 @@ class GuiWindow(QWidget):
         container.setSpacing(20)
         self._layout.addLayout(container)
         return container
-
-    def add_row_area_of_effect(self):
-        container = self._create_container()
-
-        color_selector = ColorSelectionWindow(callback=self.image_window.area_of_effect_set_color)
-        container.addLayout(color_selector)
-
-        def get_area_of_effect_callback(_shape: str, _button: StyledButton):
-            def callback():
-                self.image_window.cancel_area_of_effect()
-                if _button.isChecked():
-                    self.image_window.add_area_of_effect(
-                        shape=_shape,
-                        callback=lambda: _button.setChecked(False),
-                    )
-                    for i in range(grid_layout_shapes.count()):
-                        _other_button = grid_layout_shapes.itemAt(i).widget()
-                        if _other_button != _button:
-                            _other_button.setChecked(False)  # type: ignore[attr-defined]
-
-            return callback
-
-        grid_layout_shapes = FixedRowGridLayout(rows=2)
-        container.addLayout(grid_layout_shapes)
-
-        for shape in area_of_effect_shapes_to_class.keys():
-            button = StyledButton(shape.title(), checkable=True, padding_factor=0.7)
-            button.clicked.connect(get_area_of_effect_callback(shape, button))
-            grid_layout_shapes.add_widget(button)
-
-        grid_layout_controls = FixedRowGridLayout(rows=2)
-        container.addLayout(grid_layout_controls)
-
-        button_rasterize = StyledButton("Rasterize", checkable=True)
-        button_rasterize.clicked.connect(self.image_window.toggle_rasterize_area_of_effect)
-        grid_layout_controls.addWidget(button_rasterize)
-
-        def rasterize_button_callback_toggle_grid(value_grid: bool):
-            button_rasterize.setEnabled(value_grid)
-            if value_grid is False:
-                button_rasterize.setChecked(False)
-                self.image_window.toggle_rasterize_area_of_effect(False)
-
-        button_rasterize.setEnabled(False)
-        global_event_dispatcher.add_handler(
-            EventKeys.toggle_grid, rasterize_button_callback_toggle_grid
-        )
-
-        button = StyledButton("Clear")
-        button.clicked.connect(self.image_window.clear_area_of_effect)
-        grid_layout_controls.addWidget(button)
 
     def add_column_initiative(self):
         container = QVBoxLayout()

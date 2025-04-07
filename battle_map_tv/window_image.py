@@ -5,7 +5,6 @@ from PySide6.QtGui import QImageReader, QMouseEvent
 from PySide6.QtWidgets import QGraphicsScene, QGraphicsView
 
 from battle_map_tv.area_of_effect.manager import AreaOfEffectManager
-from battle_map_tv.events import EventKeys, global_event_dispatcher
 from battle_map_tv.grid import Grid, GridOverlay
 from battle_map_tv.image import Image
 from battle_map_tv.initiative import InitiativeOverlayManager

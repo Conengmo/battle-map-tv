@@ -1,7 +1,5 @@
 from typing import TYPE_CHECKING
 
-from PySide6.QtWidgets import QLabel
-
 from battle_map_tv.events import EventKeys, global_event_dispatcher
 from battle_map_tv.grid import GridOverlayColor
 from battle_map_tv.layouts.base import HorizontalLayout
