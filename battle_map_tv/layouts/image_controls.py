@@ -1,24 +1,20 @@
-from typing import TYPE_CHECKING
-
 from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QFileDialog, QGridLayout, QHBoxLayout, QLabel, QVBoxLayout
 
 from battle_map_tv.events import EventKeys, global_event_dispatcher
 from battle_map_tv.layouts.base import HorizontalLayout
 from battle_map_tv.settings import Settings
+from battle_map_tv.utils import get_image_window
 from battle_map_tv.widgets.sliders import StyledSlider
 from battle_map_tv.widgets.text_based import StyledLineEdit
-
-if TYPE_CHECKING:
-    from battle_map_tv.window_image import ImageWindow
 
 
 class ImageButtonsLayout(HorizontalLayout):
     """A horizontal layout with buttons to control the image."""
 
-    def __init__(self, image_window: "ImageWindow"):
+    def __init__(self):
         super().__init__()
-        self.image_window = image_window
+        self.image_window = get_image_window()
 
         self.add_button("Add", self.add_image_callback)
         self.add_button("Remove", self.image_window.remove_image)
@@ -48,11 +44,10 @@ class ImageScaleSlidersLayout(QVBoxLayout):
     factor_fine = 100000
     max_scale = 4
 
-    def __init__(self, image_window: "ImageWindow"):
+    def __init__(self):
         super().__init__()
-        self.image_window = image_window
-
-        self.scale_changed.connect(self.image_window.scale_image)
+        image_window = get_image_window()
+        self.scale_changed.connect(image_window.scale_image)
 
         scale_layout = QHBoxLayout()
         scale_layout.setSpacing(5)

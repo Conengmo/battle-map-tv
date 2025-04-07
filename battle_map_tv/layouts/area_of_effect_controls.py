@@ -1,23 +1,21 @@
-from typing import TYPE_CHECKING, Callable
+from typing import Callable
 
 from battle_map_tv.area_of_effect import area_of_effect_shapes_to_class
 from battle_map_tv.events import EventKeys, global_event_dispatcher
 from battle_map_tv.layouts.base import FixedRowGridLayout, HorizontalLayout
+from battle_map_tv.utils import get_image_window
 from battle_map_tv.widgets.buttons import ColorSelectionButton, StyledButton
-
-if TYPE_CHECKING:
-    from battle_map_tv.window_image import ImageWindow
 
 
 class AreaOfEffectControls(HorizontalLayout):
-    def __init__(self, image_window: "ImageWindow"):
+    def __init__(self):
         super().__init__()
-        self.image_window = image_window
+        self.image_window = get_image_window()
 
         color_selector = ColorSelectionWindow(callback=self.image_window.area_of_effect_set_color)
         self.addLayout(color_selector)
 
-        self.addLayout(ShapeButtonsLayout(image_window))
+        self.addLayout(ShapeButtonsLayout())
 
         grid_layout_controls = FixedRowGridLayout(rows=2)
         self.addLayout(grid_layout_controls)
@@ -46,19 +44,20 @@ class AreaOfEffectControls(HorizontalLayout):
 class ShapeButtonsLayout(FixedRowGridLayout):
     """A grid layout with buttons to select a shape to draw."""
 
-    def __init__(self, image_window: "ImageWindow"):
+    def __init__(self):
         super().__init__(rows=2)
-        self.image_window = image_window
         for shape in area_of_effect_shapes_to_class.keys():
             button = StyledButton(shape.title(), checkable=True, padding_factor=0.7)
             button.clicked.connect(self.get_area_of_effect_callback(shape, button))
             self.add_widget(button)
 
     def get_area_of_effect_callback(self, _shape: str, _button: StyledButton):
+        image_window = get_image_window()
+
         def callback():
-            self.image_window.cancel_area_of_effect()
+            image_window.cancel_area_of_effect()
             if _button.isChecked():
-                self.image_window.add_area_of_effect(
+                image_window.add_area_of_effect(
                     shape=_shape,
                     callback=lambda: _button.setChecked(False),
                 )

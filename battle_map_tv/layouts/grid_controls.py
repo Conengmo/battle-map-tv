@@ -1,18 +1,14 @@
-from typing import TYPE_CHECKING
-
 from battle_map_tv.events import EventKeys, global_event_dispatcher
 from battle_map_tv.grid import GridOverlayColor
 from battle_map_tv.layouts.base import HorizontalLayout
+from battle_map_tv.utils import get_image_window
 from battle_map_tv.widgets.sliders import StyledSlider
-
-if TYPE_CHECKING:
-    from battle_map_tv.window_image import ImageWindow
 
 
 class GridControls(HorizontalLayout):
-    def __init__(self, image_window: "ImageWindow"):
+    def __init__(self):
         super().__init__()
-        self.image_window = image_window
+        self.image_window = get_image_window()
 
         self.add_label("Grid scale")
 

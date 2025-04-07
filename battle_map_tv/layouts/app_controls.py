@@ -1,19 +1,16 @@
-from typing import TYPE_CHECKING
-
-from PySide6.QtWidgets import QApplication
-
 from battle_map_tv.layouts.base import HorizontalLayout
+from battle_map_tv.utils import get_current_application, get_image_window
 from battle_map_tv.widgets.buttons import StyledButton
-
-if TYPE_CHECKING:
-    from battle_map_tv.window_image import ImageWindow
 
 
 class AppControlsLayout(HorizontalLayout):
     """A horizontal layout with buttons to control the application."""
 
-    def __init__(self, image_window: "ImageWindow", app: QApplication):
+    def __init__(self):
         super().__init__()
+        image_window = get_image_window()
+        app = get_current_application()
+
         button = StyledButton("Fullscreen")
         button.clicked.connect(image_window.toggle_fullscreen)
         self.addWidget(button)

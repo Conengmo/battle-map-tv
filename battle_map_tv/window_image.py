@@ -15,6 +15,7 @@ from battle_map_tv.widgets import get_window_icon
 class ImageWindow(QGraphicsView):
     def __init__(self):
         super().__init__()
+        self.setObjectName("image_window")
         self.setWindowTitle("Battle Map TV")
         self.setWindowIcon(get_window_icon())
         self.setStyleSheet(
