@@ -1,6 +1,6 @@
 from typing import Callable
 
-from PySide6.QtWidgets import QGridLayout, QHBoxLayout
+from PySide6.QtWidgets import QGridLayout, QHBoxLayout, QLabel
 
 from battle_map_tv.widgets.buttons import StyledButton
 
@@ -14,6 +14,10 @@ class HorizontalLayout(QHBoxLayout):
         button = StyledButton(text, **kwargs)
         button.clicked.connect(callback)
         self.addWidget(button)
+
+    def add_label(self, text: str):
+        label = QLabel(text)
+        self.addWidget(label)
 
 
 class FixedRowGridLayout(QGridLayout):

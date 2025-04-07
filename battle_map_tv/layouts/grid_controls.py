@@ -16,8 +16,7 @@ class GridControls(HorizontalLayout):
         super().__init__()
         self.image_window = image_window
 
-        label = QLabel("Grid scale")
-        self.addWidget(label)
+        self.add_label("Grid scale")
 
         slider_grid_size = StyledSlider(
             lower=10, upper=400, default=self.image_window.grid.pixels_per_square
@@ -25,8 +24,7 @@ class GridControls(HorizontalLayout):
         slider_grid_size.valueChanged.connect(self.image_window.scale_grid)
         self.addWidget(slider_grid_size)
 
-        label = QLabel("Grid color")
-        self.addWidget(label)
+        self.add_label("Grid color")
 
         self.slider_grid_color = StyledSlider(
             lower=GridOverlayColor.min, upper=GridOverlayColor.max, default=GridOverlayColor.default
