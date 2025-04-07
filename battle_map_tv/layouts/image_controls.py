@@ -1,11 +1,12 @@
 from typing import TYPE_CHECKING, Callable, Optional
 
-from PySide6.QtWidgets import QFileDialog
+from PySide6.QtCore import Signal
+from PySide6.QtWidgets import QFileDialog, QGridLayout, QHBoxLayout, QLabel, QVBoxLayout
 
 from battle_map_tv.events import EventKeys, global_event_dispatcher
 from battle_map_tv.layouts.base import HorizontalLayout
-from battle_map_tv.widgets.buttons import StyledButton
-from battle_map_tv.widgets.sliders import DualScaleSlider
+from battle_map_tv.widgets.sliders import StyledSlider
+from battle_map_tv.widgets.text_based import StyledLineEdit
 
 if TYPE_CHECKING:
     from battle_map_tv.window_image import ImageWindow
@@ -38,18 +39,85 @@ class ImageButtonsLayout(HorizontalLayout):
             self.image_window.add_image(image_path=selected_file)
 
 
-class ImageScaleSlidersLayout(HorizontalLayout):
+class ImageScaleSlidersLayout(QVBoxLayout):
     """A horizontal layout with sliders to change the image scale."""
+
+    scale_changed = Signal(float)
+
+    factor_coarse = 1000
+    factor_fine = 100000
+    max_scale = 4
 
     def __init__(self, image_window: "ImageWindow"):
         super().__init__()
         self.image_window = image_window
 
-        slider = DualScaleSlider()
-        slider.scale_changed.connect(self.image_window.scale_image)
-        self.addWidget(slider)
+        self.scale_changed.connect(self.image_window.scale_image)
+
+        scale_layout = QHBoxLayout()
+        scale_layout.setSpacing(5)
+        scale_layout.addWidget(QLabel("Image scale:"))
+        self.scale_edit = StyledLineEdit(max_length=10, width=120, value="1.00000")
+        scale_layout.addWidget(self.scale_edit)
+        scale_layout.addStretch()
+
+        coarse_label = QLabel("Coarse")
+        self.coarse_slider = StyledSlider(
+            lower=1,
+            upper=self.max_scale * self.factor_coarse,
+            default=self.factor_coarse,
+        )
+        fine_label = QLabel("Fine")
+        self.fine_slider = StyledSlider(
+            lower=-self.factor_fine // 10,
+            upper=self.factor_fine // 10,
+            default=0,
+        )
+
+        sliders_labels_layout = QGridLayout()
+        sliders_labels_layout.addWidget(coarse_label, 0, 0)
+        sliders_labels_layout.addWidget(self.coarse_slider, 0, 1)
+        sliders_labels_layout.addWidget(fine_label, 1, 0)
+        sliders_labels_layout.addWidget(self.fine_slider, 1, 1)
+        sliders_labels_layout.setColumnStretch(1, 1)
+
+        self.setSpacing(9)
+        self.addLayout(scale_layout)
+        self.addLayout(sliders_labels_layout)
+
+        self.coarse_slider.valueChanged.connect(self.update_scale_from_sliders)
+        self.fine_slider.valueChanged.connect(self.update_scale_from_sliders)
+        self.scale_edit.editingFinished.connect(self.update_scale_from_edit)
 
         global_event_dispatcher.add_handler(
             event_type=EventKeys.change_scale,
-            handler=slider.update_sliders_from_scale,
+            handler=self.update_sliders_from_scale,
         )
+
+    def update_scale_from_sliders(self):
+        coarse_value = self.coarse_slider.value() / self.factor_coarse
+        fine_value = self.fine_slider.value() / self.factor_fine
+        total_scale = coarse_value + fine_value
+        total_scale = self._value_bounds(total_scale)
+
+        self.scale_edit.setText(f"{total_scale:.5f}")
+
+        self.scale_changed.emit(total_scale)
+
+    def update_scale_from_edit(self):
+        text = self.scale_edit.text()
+        try:
+            value = float(text)
+        except ValueError:
+            return
+        self.update_sliders_from_scale(value)
+
+    def update_sliders_from_scale(self, value: float):
+        coarse_value = round(self.factor_coarse * value)
+        remainder = value - coarse_value / self.factor_coarse
+        fine_value = round(self.factor_fine * remainder)
+        self.coarse_slider.setValue(coarse_value)
+        self.fine_slider.setValue(fine_value)
+
+    def _value_bounds(self, value: float) -> float:
+        return min(max(value, 1 / self.factor_fine), self.max_scale)
