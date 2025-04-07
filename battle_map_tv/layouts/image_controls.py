@@ -1,10 +1,11 @@
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING
 
 from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QFileDialog, QGridLayout, QHBoxLayout, QLabel, QVBoxLayout
 
 from battle_map_tv.events import EventKeys, global_event_dispatcher
 from battle_map_tv.layouts.base import HorizontalLayout
+from battle_map_tv.settings import Settings
 from battle_map_tv.widgets.sliders import StyledSlider
 from battle_map_tv.widgets.text_based import StyledLineEdit
 
@@ -15,10 +16,9 @@ if TYPE_CHECKING:
 class ImageButtonsLayout(HorizontalLayout):
     """A horizontal layout with buttons to control the image."""
 
-    def __init__(self, image_window: "ImageWindow", default_directory: Optional[str]):
+    def __init__(self, image_window: "ImageWindow"):
         super().__init__()
         self.image_window = image_window
-        self.default_directory = default_directory
 
         self.add_button("Add", self.add_image_callback)
         self.add_button("Remove", self.image_window.remove_image)
@@ -30,7 +30,7 @@ class ImageButtonsLayout(HorizontalLayout):
     def add_image_callback(self):
         file_dialog = QFileDialog(
             caption="Select an image file",
-            directory=self.default_directory,  # type: ignore[arg-type]
+            directory=Settings.default_directory,  # type: ignore[arg-type]
         )
         file_dialog.setFileMode(QFileDialog.ExistingFile)  # type: ignore[attr-defined]
         if file_dialog.exec_():

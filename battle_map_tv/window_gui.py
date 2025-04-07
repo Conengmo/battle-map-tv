@@ -1,5 +1,3 @@
-from typing import Optional
-
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
     QApplication,
@@ -18,16 +16,10 @@ from battle_map_tv.window_image import ImageWindow
 
 
 class GuiWindow(QWidget):
-    def __init__(
-        self,
-        image_window: ImageWindow,
-        app: QApplication,
-        default_directory: Optional[str],
-    ):
-        super().__init__()
-        self.image_window = image_window
-        self.app = app
+    """The control window."""
 
+    def __init__(self, image_window: ImageWindow, app: QApplication):
+        super().__init__()
         self.setWindowTitle("Controls")
         self.setWindowIcon(get_window_icon())
         self.setStyleSheet(
@@ -37,24 +29,7 @@ class GuiWindow(QWidget):
             font-size: 18px;
         """
         )
-
-        self._superlayout = QHBoxLayout(self)
-        self._superlayout.setAlignment(Qt.AlignVCenter)  # type: ignore[attr-defined]
-        self._superlayout.setContentsMargins(60, 80, 80, 80)
-        self._superlayout.setSpacing(50)
-
-        self._superlayout.addLayout(InitiativeControls(image_window))
-
-        layout = QVBoxLayout()
-        self._superlayout.addLayout(layout)
-
-        layout.addLayout(
-            ImageButtonsLayout(image_window=image_window, default_directory=default_directory)
-        )
-        layout.addLayout(ImageScaleSlidersLayout(image_window=image_window))
-        layout.addLayout(GridControls(image_window=image_window))
-        layout.addLayout(AreaOfEffectControls(image_window=image_window))
-        layout.addLayout(AppControlsLayout(image_window=image_window, app=app))
+        self.setLayout(ControlsLayout(image_window, app))
 
         # take focus away from the text area
         self.setFocus()
@@ -63,3 +38,28 @@ class GuiWindow(QWidget):
         # user clicked in the blank space of the GUI, take focus away from other elements
         self.setFocus()
         super().mousePressEvent(event)
+
+
+class ControlsLayout(QHBoxLayout):
+    """Main layout of the control window."""
+
+    def __init__(self, image_window: "ImageWindow", app: QApplication):
+        super().__init__()
+        self.setAlignment(Qt.AlignVCenter)  # type: ignore[attr-defined]
+        self.setContentsMargins(60, 80, 80, 80)
+        self.setSpacing(50)
+
+        self.addLayout(InitiativeControls(image_window))
+        self.addLayout(RightColumnControls(image_window, app))
+
+
+class RightColumnControls(QVBoxLayout):
+    """Controls on the right-hand side of the control window."""
+
+    def __init__(self, image_window: "ImageWindow", app: QApplication):
+        super().__init__()
+        self.addLayout(ImageButtonsLayout(image_window=image_window))
+        self.addLayout(ImageScaleSlidersLayout(image_window=image_window))
+        self.addLayout(GridControls(image_window=image_window))
+        self.addLayout(AreaOfEffectControls(image_window=image_window))
+        self.addLayout(AppControlsLayout(image_window=image_window, app=app))
