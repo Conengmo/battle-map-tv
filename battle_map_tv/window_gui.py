@@ -16,6 +16,7 @@ from battle_map_tv.grid import GridOverlayColor
 from battle_map_tv.layouts.app_controls import AppControlsLayout
 from battle_map_tv.layouts.area_of_effect import ColorSelectionWindow
 from battle_map_tv.layouts.base import FixedRowGridLayout
+from battle_map_tv.layouts.image_controls import ImageButtonsLayout
 from battle_map_tv.widgets import get_window_icon
 from battle_map_tv.widgets.buttons import StyledButton
 from battle_map_tv.widgets.sliders import DualScaleSlider, StyledSlider
@@ -33,7 +34,6 @@ class GuiWindow(QWidget):
         super().__init__()
         self.image_window = image_window
         self.app = app
-        self.default_directory = default_directory
 
         self.setWindowTitle("Controls")
         self.setWindowIcon(get_window_icon())
@@ -55,7 +55,9 @@ class GuiWindow(QWidget):
         self._layout = QVBoxLayout()
         self._superlayout.addLayout(self._layout)
 
-        self.add_row_image_buttons()
+        self._layout.addLayout(
+            ImageButtonsLayout(image_window=image_window, default_directory=default_directory)
+        )
         self.add_row_scale_slider()
         self.add_row_grid()
         self.add_row_area_of_effect()
@@ -74,56 +76,6 @@ class GuiWindow(QWidget):
         container.setSpacing(20)
         self._layout.addLayout(container)
         return container
-
-    def add_row_image_buttons(self):
-        container = self._create_container()
-
-        def open_file_dialog():
-            file_dialog = QFileDialog(
-                caption="Select an image file",
-                directory=self.default_directory,  # type: ignore[arg-type]
-            )
-            file_dialog.setFileMode(QFileDialog.ExistingFile)  # type: ignore[attr-defined]
-            if file_dialog.exec_():
-                selected_file = file_dialog.selectedFiles()[0]
-                self.image_window.remove_image()
-                self.image_window.add_image(image_path=selected_file)
-
-        button = StyledButton("Add")
-        button.clicked.connect(open_file_dialog)
-        container.addWidget(button)
-
-        button = StyledButton("Remove")
-        button.clicked.connect(self.image_window.remove_image)
-        container.addWidget(button)
-
-        button = StyledButton("Restore")
-        button.clicked.connect(self.image_window.restore_image)
-        container.addWidget(button)
-
-        def callback_button_center_image():
-            if self.image_window.image is not None:
-                self.image_window.image.center()
-
-        button = StyledButton("Center")
-        button.clicked.connect(callback_button_center_image)
-        container.addWidget(button)
-
-        def callback_button_rotate_image():
-            if self.image_window.image is not None:
-                self.image_window.image.rotate()
-
-        button = StyledButton("Rotate")
-        button.clicked.connect(callback_button_rotate_image)
-        container.addWidget(button)
-
-        def button_autoscale_callback():
-            if self.image_window.image is not None:
-                self.image_window.image.autoscale(grid=self.image_window.grid)
-
-        button = StyledButton("Autoscale")
-        button.clicked.connect(button_autoscale_callback)
-        container.addWidget(button)
 
     def add_row_scale_slider(self):
         container = self._create_container()

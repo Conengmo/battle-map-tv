@@ -69,6 +69,18 @@ class ImageWindow(QGraphicsView):
             self.remove_image()
             self.add_image(image_path=previous_image)
 
+    def center_image(self):
+        if self.image is not None:
+            self.image.center()
+
+    def rotate_image(self):
+        if self.image is not None:
+            self.image.rotate()
+
+    def autoscale_image(self):
+        if self.image is not None:
+            self.image.autoscale(grid=self.grid)
+
     def add_grid(self, color_value: int):
         if self.grid_overlay is not None:
             self.remove_grid()
