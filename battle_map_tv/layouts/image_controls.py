@@ -26,11 +26,6 @@ class ImageButtonsLayout(HorizontalLayout):
         self.add_button("Rotate", self.image_window.rotate_image)
         self.add_button("Autoscale", self.image_window.autoscale_image)
 
-    def add_button(self, text: str, callback: Callable):
-        button = StyledButton(text)
-        button.clicked.connect(callback)
-        self.addWidget(button)
-
     def add_image_callback(self):
         file_dialog = QFileDialog(
             caption="Select an image file",
