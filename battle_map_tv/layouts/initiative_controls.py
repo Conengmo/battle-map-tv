@@ -22,7 +22,10 @@ class InitiativeTextArea(StyledTextEdit):
 
     def callback(self):
         text = self.toPlainText().strip()
-        self.image_window.add_initiative(text)
+        self.image_window.remove_initiative()
+        if text:
+            self.image_window.add_initiative(text)
+
 
 
 class InitiativeButtons(HorizontalLayout):
