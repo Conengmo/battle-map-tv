@@ -1,7 +1,5 @@
-from PySide6.QtCore import Qt, Signal
-from PySide6.QtWidgets import QGridLayout, QHBoxLayout, QLabel, QSlider, QVBoxLayout, QWidget
-
-from battle_map_tv.widgets.text_based import StyledLineEdit
+from PySide6.QtCore import Qt
+from PySide6.QtWidgets import QSlider
 
 
 class StyledSlider(QSlider):

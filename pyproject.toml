@@ -6,7 +6,7 @@ check_untyped_defs = true
 line-length = 100
 
 [tool.ruff.lint]
-select = ["I"]
+select = ["I", "F401"]
 
 [tool.hatch]
 
