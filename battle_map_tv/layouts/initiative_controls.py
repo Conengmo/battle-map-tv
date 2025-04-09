@@ -18,7 +18,7 @@ class InitiativeTextArea(StyledTextEdit):
         super().__init__()
         self.image_window = get_image_window()
         self.setPlaceholderText("Display initiative order")
-        self.on_text_changed(self.callback)
+        self.textChangedDebounced.connect(self.callback)
 
     def callback(self):
         text = self.toPlainText().strip()
