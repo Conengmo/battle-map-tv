@@ -35,6 +35,8 @@ class StyledLineEdit(QLineEdit):
 
 
 class StyledTextEdit(QTextEdit):
+    text_changed_debounce_ms = 700
+
     def __init__(self):
         super().__init__()
         self.setStyleSheet(
@@ -53,6 +55,6 @@ class StyledTextEdit(QTextEdit):
         typing_timer.timeout.connect(callback)
 
         def reset_typing_timer():
-            typing_timer.start(700)
+            typing_timer.start(self.text_changed_debounce_ms)
 
         self.textChanged.connect(reset_typing_timer)
