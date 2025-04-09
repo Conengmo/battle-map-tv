@@ -88,12 +88,10 @@ class ColorSelectionWindow(FixedRowGridLayout):
             button.clicked.connect(self.create_color_selected_handler(color, callback))
             self.add_widget(button)
             self.buttons.append(button)
-        self.selected_color: str
         self.buttons[-1].click()
 
     def create_color_selected_handler(self, color: str, callback: Callable):
         def handler():
-            self.selected_color = color
             for button in self.buttons:
                 if button.color == color:
                     button.setStyleSheet(button.selected_stylesheet)

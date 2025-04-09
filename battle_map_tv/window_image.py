@@ -100,10 +100,6 @@ class ImageWindow(QGraphicsView):
         self.grid_overlay = GridOverlay(window=self, grid=self.grid, color_value=color_value)
         self.grid.enable_snap = True
 
-    def update_screen_size_mm(self):
-        if self.grid_overlay is not None:
-            self.grid_overlay.reset()
-
     def scale_grid(self, value: int):
         self.grid.set_size(value)
         if self.grid_overlay is not None:

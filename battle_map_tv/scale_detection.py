@@ -204,10 +204,3 @@ def polar_to_cartesian(
     x2 = int(x0 - image_length * (-b))
     y2 = int(y0 - image_length * a)
     return (x1, y1), (x2, y2)
-
-
-if __name__ == "__main__":
-    find_image_scale(
-        image_path=r"C:\Users\frank\Documents\Battle maps\f079483060cc8abafba9ea72f8bb5722.jpg",
-        show_result=True,
-    )
