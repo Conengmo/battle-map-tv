@@ -22,7 +22,7 @@ def image_window(test_app, qtbot):
 
 @pytest.fixture
 def gui_window(test_app, image_window, qtbot):
-    gui_window = GuiWindow(image_window=image_window, app=test_app, default_directory=None)
+    gui_window = GuiWindow()
     qtbot.addWidget(gui_window)
     gui_window.move(gui_window.screen().geometry().topLeft())
     yield gui_window
