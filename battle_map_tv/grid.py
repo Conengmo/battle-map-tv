@@ -1,5 +1,5 @@
 import math
-from typing import TYPE_CHECKING, List, Optional, Tuple
+from typing import List, Optional, Tuple
 
 from PySide6.QtCore import QLineF
 from PySide6.QtGui import QColor, QPen
@@ -12,15 +12,11 @@ from battle_map_tv.storage import (
     set_image_in_storage,
     set_in_storage,
 )
-from battle_map_tv.utils import size_to_tuple
-
-if TYPE_CHECKING:
-    from battle_map_tv.window_image import ImageWindow
+from battle_map_tv.utils import get_image_filename, get_image_window_size_px
 
 
 class Grid:
-    def __init__(self, window: "ImageWindow"):
-        self.window = window
+    def __init__(self):
         self.enable_snap: bool = False
 
         self.pixels_per_square: int = get_from_storage(StorageKeys.pixels_per_square, default=40)
@@ -34,25 +30,23 @@ class Grid:
         values = list(generator)
         return values[0], values[1]
 
-    @property
-    def window_size_px(self):
-        return size_to_tuple(self.window.size())
-
     def calculate(self):
+        window_size_px = get_image_window_size_px()
         self.n_lines = self._as_tuple(
-            math.ceil(self.window_size_px[i] / self.pixels_per_square) for i in range(2)
+            math.ceil(window_size_px[i] / self.pixels_per_square) for i in range(2)
         )
 
         self.offset = self._as_tuple(
-            int(self.window_size_px[i] / 2 - self.pixels_per_square * int(self.n_lines[i] / 2))
+            int(window_size_px[i] / 2 - self.pixels_per_square * int(self.n_lines[i] / 2))
             for i in range(2)
         )
 
     def set_size(self, value: int):
         self.pixels_per_square = value
-        if self.window.image is not None:
+        image_filename = get_image_filename()
+        if image_filename:
             set_image_in_storage(
-                image_filename=self.window.image.image_filename,
+                image_filename=image_filename,
                 key=ImageKeys.grid_pixels_per_square,
                 value=value,
             )
@@ -62,12 +56,13 @@ class Grid:
 
     def get_lines(self, axis: int) -> List[Tuple[int, int, int, int]]:
         assert axis in (0, 1)
+        window_size_px = get_image_window_size_px()
         lines = []
         for i in range(self.n_lines[axis]):
             start_point = (i * self.pixels_per_square + self.offset[axis], 0)
             end_point = (
                 i * self.pixels_per_square + self.offset[axis],
-                self.window_size_px[1 if axis == 0 else 0],
+                window_size_px[1 if axis == 0 else 0],
             )
             if axis == 1:
                 start_point = start_point[::-1]

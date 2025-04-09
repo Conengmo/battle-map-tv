@@ -47,7 +47,7 @@ class StyledTextEdit(QTextEdit):
         """
         )
 
-    def connect_text_changed_callback_with_timer(self, callback: Callable):
+    def on_text_changed(self, callback: Callable):
         typing_timer = QTimer()
         typing_timer.setSingleShot(True)
         typing_timer.timeout.connect(callback)

@@ -15,6 +15,7 @@ from battle_map_tv.widgets import get_window_icon
 class ImageWindow(QGraphicsView):
     def __init__(self):
         super().__init__()
+        self.setObjectName("image_window")
         self.setWindowTitle("Battle Map TV")
         self.setWindowIcon(get_window_icon())
         self.setStyleSheet(
@@ -34,7 +35,7 @@ class ImageWindow(QGraphicsView):
         self.setScene(scene)
 
         self.image: Optional[Image] = None
-        self.grid = Grid(window=self)
+        self.grid = Grid()
         self.grid_overlay: Optional[GridOverlay] = None
         self.initiative_overlay_manager = InitiativeOverlayManager(scene=scene)
         self.area_of_effect_manager = AreaOfEffectManager(window=self, grid=self.grid)
@@ -69,6 +70,22 @@ class ImageWindow(QGraphicsView):
             self.remove_image()
             self.add_image(image_path=previous_image)
 
+    def center_image(self):
+        if self.image is not None:
+            self.image.center()
+
+    def rotate_image(self):
+        if self.image is not None:
+            self.image.rotate()
+
+    def autoscale_image(self):
+        if self.image is not None:
+            self.image.autoscale(grid=self.grid)
+
+    def scale_image(self, value: int, dispatch_event: bool = False):
+        if self.image is not None:
+            self.image.scale(value, dispatch_event=dispatch_event)
+
     def add_grid(self, color_value: int):
         if self.grid_overlay is not None:
             self.remove_grid()
@@ -81,15 +98,26 @@ class ImageWindow(QGraphicsView):
             if pixels_per_square:
                 self.grid.set_size(pixels_per_square)
         self.grid_overlay = GridOverlay(window=self, grid=self.grid, color_value=color_value)
+        self.grid.enable_snap = True
 
     def update_screen_size_mm(self):
         if self.grid_overlay is not None:
             self.grid_overlay.reset()
 
+    def scale_grid(self, value: int):
+        self.grid.set_size(value)
+        if self.grid_overlay is not None:
+            self.grid_overlay.reset()
+
+    def change_grid_color(self, value: int):
+        if self.grid_overlay is not None:
+            self.grid_overlay.update_color(value)
+
     def remove_grid(self):
         if self.grid_overlay is not None:
             self.grid_overlay.delete()
             self.grid_overlay = None
+            self.grid.enable_snap = False
 
     def add_initiative(self, text: str):
         self.initiative_overlay_manager.create(text=text)

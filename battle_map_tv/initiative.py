@@ -14,16 +14,14 @@ class InitiativeOverlayManager:
         self.overlays = []
 
     def create(self, text: str):
-        self.clear()
-        if text:
-            positions: Tuple[int, int] = get_from_storage(
-                key=StorageKeys.initiative_positions,
-                default=(0, 4),
-            )
-            self.overlays = [
-                InitiativeOverlay(text, self.scene, self.font_size).move(position=positions[0]),
-                InitiativeOverlay(text, self.scene, self.font_size).move(position=positions[1]),
-            ]
+        positions: Tuple[int, int] = get_from_storage(
+            key=StorageKeys.initiative_positions,
+            default=(0, 4),
+        )
+        self.overlays = [
+            InitiativeOverlay(text, self.scene, self.font_size).move(position=positions[0]),
+            InitiativeOverlay(text, self.scene, self.font_size).move(position=positions[1]),
+        ]
 
     def change_font_size(self, by: int):
         if self.overlays:

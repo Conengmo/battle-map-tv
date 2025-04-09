@@ -1,14 +1,14 @@
 import argparse
 import sys
-from typing import Optional
 
 from PySide6 import QtWidgets
 
+from battle_map_tv.settings import Settings
 from battle_map_tv.window_gui import GuiWindow
 from battle_map_tv.window_image import ImageWindow
 
 
-def main(default_directory: Optional[str]):
+def main():
     app = QtWidgets.QApplication([])
 
     screens = app.screens()
@@ -16,11 +16,7 @@ def main(default_directory: Optional[str]):
     image_window = ImageWindow()
     image_window.resize(800, 600)
 
-    gui_window = GuiWindow(
-        image_window=image_window,
-        app=app,
-        default_directory=default_directory,
-    )
+    gui_window = GuiWindow()
 
     image_window.show()
     gui_window.show()
@@ -47,4 +43,6 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
-    main(default_directory=args.default_directory)
+    Settings.create(default_directory=args.default_directory)
+
+    main()
