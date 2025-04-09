@@ -6,13 +6,13 @@ from battle_map_tv.window_image import ImageWindow
 
 
 @pytest.fixture
-def test_app(qtbot):
+def app_instance(qtbot):
     app = QApplication.instance() or QApplication([])
     return app
 
 
 @pytest.fixture
-def image_window(test_app, qtbot):
+def image_window(app_instance, qtbot):
     image_window = ImageWindow()
     qtbot.addWidget(image_window)
     image_window.move(image_window.screen().geometry().center())
@@ -21,7 +21,7 @@ def image_window(test_app, qtbot):
 
 
 @pytest.fixture
-def gui_window(test_app, image_window, qtbot):
+def gui_window(app_instance, image_window, qtbot):
     gui_window = GuiWindow()
     qtbot.addWidget(gui_window)
     gui_window.move(gui_window.screen().geometry().topLeft())
