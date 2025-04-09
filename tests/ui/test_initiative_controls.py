@@ -1,6 +1,4 @@
-import time
 
-from PySide6.QtCore import Qt
 
 from battle_map_tv.layouts.initiative_controls import InitiativeTextArea
 from battle_map_tv.utils import find_child_by_attribute
