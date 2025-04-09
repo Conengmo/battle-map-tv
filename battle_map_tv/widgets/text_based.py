@@ -1,6 +1,4 @@
-from typing import Callable
-
-from PySide6.QtCore import QTimer
+from PySide6.QtCore import QTimer, Signal
 from PySide6.QtWidgets import QLineEdit, QTextEdit
 
 
@@ -35,6 +33,9 @@ class StyledLineEdit(QLineEdit):
 
 
 class StyledTextEdit(QTextEdit):
+    text_changed_debounce_ms = 700
+    textChangedDebounced = Signal()
+
     def __init__(self):
         super().__init__()
         self.setStyleSheet(
@@ -46,13 +47,11 @@ class StyledTextEdit(QTextEdit):
             border-radius: 6px;
         """
         )
+        self._typing_timer = QTimer()
+        self._typing_timer.setSingleShot(True)
+        self._typing_timer.timeout.connect(self.textChangedDebounced.emit)
 
-    def on_text_changed(self, callback: Callable):
-        typing_timer = QTimer()
-        typing_timer.setSingleShot(True)
-        typing_timer.timeout.connect(callback)
+        self.textChanged.connect(self._reset_typing_timer)
 
-        def reset_typing_timer():
-            typing_timer.start(700)
-
-        self.textChanged.connect(reset_typing_timer)
+    def _reset_typing_timer(self):
+        self._typing_timer.start(self.text_changed_debounce_ms)

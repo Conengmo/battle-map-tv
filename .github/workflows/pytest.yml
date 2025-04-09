@@ -11,25 +11,37 @@ permissions:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
+    env:
+      # Display must be available globally for linux to know where xvfb is
+      DISPLAY: ":99.0"
+      QT_SELECT: "qt6"
 
     steps:
     - uses: actions/checkout@v3
 
-    - name: Install Pyside6 dependencies
+    - name: Install Linux dependencies
       run: |
-        sudo apt update && sudo apt install -y libegl1-mesa-dev
+        # Copied from https://stackoverflow.com/a/77480795/4082914
+        sudo apt-get install -y xvfb libxkbcommon-x11-0 libxcb-icccm4 libxcb-image0 \
+            libxcb-keysyms1 libxcb-randr0 libxcb-render-util0 libxcb-xinerama0 libxcb-xinput0 \
+            libxcb-xfixes0 libxcb-shape0 libglib2.0-0 libgl1-mesa-dev
+        
+        sudo apt-get install '^libxcb.*-dev' libx11-xcb-dev libglu1-mesa-dev libxrender-dev \
+            libxi-dev libxkbcommon-dev libxkbcommon-x11-dev
+
+        # start xvfb in the background
+        sudo /usr/bin/Xvfb $DISPLAY -screen 0 1280x1024x24 &
 
     - name: Set up Python 3
       uses: actions/setup-python@v3
 
-    - name: Install dependencies
+    - name: Install Python dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-        pip install pytest
+        pip install pytest pytest-qt
 
     - name: Run tests with Pytest
       run: |
-        pytest .
+        pytest tests
