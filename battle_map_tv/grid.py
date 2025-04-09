@@ -3,7 +3,7 @@ from typing import List, Optional, Tuple
 
 from PySide6.QtCore import QLineF
 from PySide6.QtGui import QColor, QPen
-from PySide6.QtWidgets import QGraphicsItemGroup, QGraphicsView
+from PySide6.QtWidgets import QGraphicsItemGroup
 
 from battle_map_tv.storage import (
     ImageKeys,
