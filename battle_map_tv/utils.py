@@ -33,10 +33,13 @@ def get_image_filename() -> Optional[str]:
     return image_window.image.image_filename if image_window.image else None
 
 
-def find_child_by_attribute(parent: QObject, child_type: Type[QObject], text: str):
+def find_child_by_attribute(parent: QObject, child_type: Type[QObject], text: Optional[str] = None):
     child: QObject
     for child in parent.findChildren(child_type):
-        if text and child.text() == text:  # type: ignore
+        if text:
+            if child.text() == text:  # type: ignore
+                return child
+        else:
             return child
     raise AttributeError(
         f"Could not find child of type {child_type} with text '{text}' in {parent}"
